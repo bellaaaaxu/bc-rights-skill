@@ -64,7 +64,9 @@ mkdirSync(out, { recursive: true });
 const transcript = [];
 let session = null;
 let cost = 0;
-let helperMsg = narrative.split('\n').filter((l) => !l.startsWith('今天：')).join('\n').trim();
+// Keep the 今天 line: the helper's host injects the real calendar date, and without the story's own date two of eight
+// helpers first treated a 2021 story as long overdue (M4 decision set, cases 109 and 105).
+let helperMsg = narrative.trim();
 let packageText = null;
 for (let t = 1; t <= maxTurns; t++) {
   const h = run(helperArgv(helperMsg, session), helperDir);
