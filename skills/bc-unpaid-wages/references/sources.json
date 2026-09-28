@@ -1,0 +1,17 @@
+{
+  "note": "Official sources the bc-unpaid-wages skill relies on. Two dates per source: last_checked moves on every automated run; last_human_verified moves only when a person has read the source again and run `npm run accept`. fail_closed_after_days (180) is a safety threshold this project chose; it is not a rule of the Employment Standards Branch or of any statute.",
+  "fail_closed_after_days": 180,
+  "sources": [
+    {
+      "id": "esb-form-pdf",
+      "what": "ESB complaint form PDF (REV 2025-08-26)",
+      "url": "https://www2.gov.bc.ca/assets/gov/employment-business-and-economic-development/employment-standards-workplace-safety/employment-standards/forms/complaint_form.pdf",
+      "type": "hash",
+      "used_in": ["02-first-action", "05-form"],
+      "baseline": null,
+      "last_checked": null,
+      "last_human_verified": "2026-09-27",
+      "status": "new"
+    }
+  ]
+}
