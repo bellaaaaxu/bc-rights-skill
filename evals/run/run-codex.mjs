@@ -52,8 +52,9 @@ function summarise(jsonl, last) {
   const text = jsonl;
   // Codex --json: look for any usage object with input/output token counts and take the last one seen.
   const usages = ev.map((e) => e?.usage ?? e?.info?.total_token_usage ?? e?.item?.usage ?? null).filter(Boolean);
-  const last = usages[usages.length - 1];
-  const tokens = last ? (last.total_tokens ?? ((last.input_tokens ?? 0) + (last.output_tokens ?? 0)) || null) : null;
+  const lastUsage = usages[usages.length - 1];
+  const summed = lastUsage ? (lastUsage.total_tokens ?? ((lastUsage.input_tokens ?? 0) + (lastUsage.output_tokens ?? 0))) : 0;
+  const tokens = summed > 0 ? summed : null;
   return {
     model: ev.find((e) => e?.model)?.model ?? null,
     skill_used: /bc-unpaid-wages[\\/]+SKILL\.md/.test(text),
