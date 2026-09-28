@@ -4,9 +4,11 @@
   "private": true,
   "description": "Agent skills that walk a person through official procedures in British Columbia. v0.1: unpaid wages complaint to the Employment Standards Branch.",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "test": "node --test tests/",
+    "test": "node --test \"tests/**/*.test.mjs\"",
     "check": "node scripts/check-sources.mjs",
     "accept": "node scripts/check-sources.mjs --accept",
     "validate": "node scripts/validate.mjs",
