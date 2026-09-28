@@ -14,8 +14,11 @@ export function status(sources, today = new Date(), home = homedir()) {
   const dates = sources.sources.map((s) => s.last_human_verified).filter(Boolean).sort();
   const oldest = dates[0] ?? null;
   const days = oldest === null ? null : Math.floor((today.getTime() - new Date(oldest).getTime()) / DAY);
-  const flagged = sources.sources.filter((s) => s.status !== 'ok').map((s) => ({ id: s.id, status: s.status, used_in: s.used_in }));
-  const lawFlagged = sources.sources.some((s) => s.type === 'law' && s.status !== 'ok');
+  // 'changed' and 'error' mean a person has to look again; 'new' only means the automated check has no baseline yet.
+  const isFlag = (s) => s.status === 'changed' || s.status === 'error';
+  const flagged = sources.sources.filter(isFlag).map((s) => ({ id: s.id, status: s.status, used_in: s.used_in }));
+  const unbaselined = sources.sources.filter((s) => s.status === 'new').map((s) => s.id);
+  const lawFlagged = sources.sources.some((s) => s.type === 'law' && isFlag(s));
   const tooOld = days === null || days > sources.fail_closed_after_days;
   const candidates = [
     join(home, '.agents', 'skills', 'canada-employment-law', 'scripts', 'bclaw.mjs'),
@@ -32,6 +35,7 @@ export function status(sources, today = new Date(), home = homedir()) {
         ? 'a statute source is flagged as possibly changed and not yet re-verified'
         : null,
     flagged,
+    unbaselined,
     canada_law_script: candidates.find((p) => existsSync(p)) ?? null,
     install_canada_law: 'npx https://github.com/bellaaaaxu/canada-law/releases/download/v0.2.2/canada-law-0.2.2.tgz install',
   };

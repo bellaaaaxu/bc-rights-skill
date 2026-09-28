@@ -31,6 +31,13 @@ test('a flagged law source is fail closed; a flagged page source is only listed'
   assert.deepEqual(s.flagged, [{ id: 'a', status: 'changed', used_in: ['01'] }]);
 });
 
+test('a source with no baseline yet is listed as unbaselined, not flagged, and does not fail closed', () => {
+  const s = status(src({ laws: { status: 'new' } }), new Date('2026-02-01'), home);
+  assert.equal(s.fail_closed, false);
+  assert.deepEqual(s.flagged, []);
+  assert.deepEqual(s.unbaselined, ['laws']);
+});
+
 test('the oldest human verification date counts', () => {
   const s = status(src({ a: { last_human_verified: '2025-01-01' } }), new Date('2026-02-01'), home);
   assert.equal(s.last_human_verified, '2025-01-01');

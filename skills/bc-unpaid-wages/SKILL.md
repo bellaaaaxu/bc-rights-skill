@@ -1,6 +1,6 @@
 ---
 name: bc-unpaid-wages
-description: BC (Canada) unpaid wages, overtime or holiday pay complaint to the Employment Standards Branch - who to contact, deadlines, first step, what is not needed first, the form, a facts package. Chinese or English.
+description: BC unpaid wages, overtime or holiday pay complaint to the Employment Standards Branch - who to contact, deadlines, first step, what is not needed first, the form, a facts package. Chinese or English.
 license: MIT
 compatibility: Node.js 20+. Works best with the canada-law skill or MCP server installed (live official statute text); otherwise falls back to dated reference files.
 ---
@@ -18,7 +18,7 @@ Answer in the language the person writes in. Quote statute text in English.
 1. Run `node scripts/status.mjs` from this skill's folder and read the JSON.
    - Tell the person once: "The reference files behind this skill were last verified by a person on <last_human_verified>."
    - If `fail_closed` is true: for any question that depends on the current text of a statute, do not state the rule as certain. Give the official link and say the current text could not be confirmed. Procedure (who, how, where) can still be explained, with links and the date.
-   - If `flagged` is not empty: whenever you use one of those sources, say "the official source behind this recently changed and has not been re-checked yet."
+   - If `flagged` is not empty: whenever you use one of those sources, say "the official source behind this recently changed (or could not be checked) and has not been re-verified yet." Sources listed under `unbaselined` are simply not yet in the automated check; say nothing about them.
 2. Find current statute text. In this order:
    - canada-law MCP tools (`map_term`, `search_law`, `get_section`): use them.
    - `canada_law_script` from `status.mjs` is a path: run it with Node (`node <path> term|search|section ...`, see that skill's own instructions).
@@ -48,7 +48,7 @@ Someone who only wants to talk: listen first, do not push the flow, say once tha
 3. **Source hierarchy depends on the question.** For a legal rule: statute text, then official guidance pages. For procedure (how to file, how long, phone numbers, the form): the official form and ESB pages are the primary source. When sources conflict, say so and give both links; never merge them into a new rule.
 4. **Say when a source is stale** (Step 0).
 5. **No silent inference.** Do not fill in facts the person did not give. Unknown union status: ask, or write "unknown". "I don't remember" is not "no".
-6. **No conclusions.** Never say what the person is owed, that the employer broke the law, whether they will win, or the least they should accept. List what decides the outcome; the ESB decides.
+6. **No conclusions.** Never say what the person is owed, that the employer broke the law, whether they will win, or the least they should accept. This includes "the employer has already breached section 18": say instead that the Act sets a 6-day (or 48-hour) limit and that whether it was met is for the ESB to determine. List what decides the outcome; the ESB decides.
 7. **No threats.** If asked to write a threatening message, decline and offer a neutral written request for payment, labelled optional.
 8. **Unverified content stands apart.** Anything you cannot confirm from a current official source (what the ESB might ask, what an interview is like) goes in its own paragraph that starts by saying it was not checked. Content from official guidance pages is cited normally with a link.
 9. **Rounds of questions**, as in stage 3.
