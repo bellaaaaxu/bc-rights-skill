@@ -10,17 +10,18 @@
 
 ## 不用先做的四件事
 
-- **不用先找老板。** 官网建议能沟通先沟通，但这不是投诉的前提。[来源: esb-process] 旧文章和一些 AI 说要先用 Self-Help Kit 找老板，这个要求 2019 年已经取消。[来源: self-help-kit-news]
+- **不用先找老板。** 官网建议能沟通先沟通，但这不是投诉的前提（投诉流程页 https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/complaint-process ）。[来源: esb-process] 旧文章和一些 AI 说要先用 Self-Help Kit 找老板，这个要求 2019 年已经取消（新闻稿 https://archive.news.gov.bc.ca/releases/news_releases_2017-2021/2019LBR0023-001663.htm ）。[来源: self-help-kit-news]
 - **不用等证据备齐。** 提交时不用附证据，ESB 之后可能会向你要。[来源: esb-form-pdf]
 - **不用算出准确金额。** 填估计的数，写个范围也行。[来源: esb-form-pdf]
 - **不用花钱，不用请律师。** 投诉免费。[来源: esb-submit]
 
 ## 怎么投诉
 
-- **网上填**：官方投诉系统 [来源: esb-online-form]。表格闲置 10 到 30 分钟会过期、内容会丢，所以先把下面五样准备好再填。提交后记下案号（case number），会收到确认邮件。[来源: esb-submit]
-- **看不懂英文**：打免费电话 1-833-236-3700，可以用中文找人帮忙（周一到周五 7:30 到 17:00，太平洋时间）。[来源: esb-contact]
+- **网上填**：官方投诉系统 https://services.labour.gov.bc.ca/Complaints/s/ [来源: esb-online-form]（说明页 https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/complaint-process/submit-a-complaint ）。表格闲置 10 到 30 分钟会过期、内容会丢，所以先把下面五样准备好再填。提交后记下案号（case number），会收到确认邮件。[来源: esb-submit]
+- **看不懂英文**：打免费电话 1-833-236-3700，可以用中文找人帮忙（周一到周五 7:30 到 17:00，太平洋时间；联系页 https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/contact-us ）。[来源: esb-contact]
 - **家人、朋友可以帮你填**：表上有专门写帮忙者或代表的部分。[来源: esb-form-pdf]
-- **也可以打印投诉表** [来源: esb-form-pdf] 邮寄、传真或电邮，地址和邮箱以 ESB 联系页为准 [来源: esb-contact]。
+- **也可以打印投诉表**（PDF https://www2.gov.bc.ca/assets/gov/employment-business-and-economic-development/employment-standards-workplace-safety/employment-standards/forms/complaint_form.pdf ）[来源: esb-form-pdf] 邮寄、传真或电邮，地址和邮箱以 ESB 联系页为准 [来源: esb-contact]。
+- 给链接时只用这几条和 sources.json 里的网址，不要自己拼 gov.bc.ca 的路径。
 - 表格各部分问什么，见 05。
 
 ## 提前准备的五样（有多少写多少）
@@ -39,6 +40,6 @@
 
 ## 已经不上班了：EI 别拖
 
-- **尽快申请 EI，别等 ROE。** 超过 4 周才申请，可能少拿；文件可以之后补。[来源: ei-apply]
-- **自己辞职也不一定领不到。** 法律列了一些可能算辞职正当理由的情况，包括工资条件被大幅改动、拒付加班费，前提是当时没有别的合理选择；能不能领由 Service Canada 判断。（EI Act s.29(c) [来源: laws-other]；入口 [来源: service-canada-ei]）
+- **尽快申请 EI，别等 ROE。** 超过 4 周才申请，可能少拿；文件可以之后补（申请页 https://www.canada.ca/en/services/benefits/ei/ei-regular-benefit/apply.html ）。[来源: ei-apply]
+- **自己辞职也不一定领不到。** 法律列了一些可能算辞职正当理由的情况，包括工资条件被大幅改动、拒付加班费，前提是当时没有别的合理选择；能不能领由 Service Canada 判断。（EI Act s.29(c) [来源: laws-other]；EI 总页 https://www.canada.ca/en/services/benefits/ei.html [来源: service-canada-ei]）
 - EI 和投诉 ESB 是两件事，可以同时办。两边说的情况要一致。

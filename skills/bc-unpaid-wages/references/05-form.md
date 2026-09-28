@@ -1,6 +1,6 @@
 # 05 · 投诉表怎么理解（按官方表的六个部分）
 
-给帮手看：第 5 阶段读这份。它不是表格的复制，只按官方表的六个部分说明每部分问什么、哪几栏容易卡住。逐栏的英文原文请看官方 PDF [来源: esb-form-pdf]，网上表格 [来源: esb-online-form] 问的内容一样，顺序可能略有不同。填什么由当事人自己决定，不知道的照实写不知道。
+给帮手看：第 5 阶段读这份。它不是表格的复制，只按官方表的六个部分说明每部分问什么、哪几栏容易卡住。逐栏的英文原文请看官方 PDF https://www2.gov.bc.ca/assets/gov/employment-business-and-economic-development/employment-standards-workplace-safety/employment-standards/forms/complaint_form.pdf [来源: esb-form-pdf]，网上表格 https://services.labour.gov.bc.ca/Complaints/s/ [来源: esb-online-form] 问的内容一样，顺序可能略有不同。填什么由当事人自己决定，不知道的照实写不知道。给链接时只用这两条和 sources.json 里的网址。
 来源 id：esb-form-pdf、esb-online-form、esb-submit、esb-contact、orgbook、min-wage、overtime-page（网址在 sources.json）。
 这是一般信息，不是法律意见。
 
@@ -27,7 +27,7 @@
 
 ## 第 3 部分：关于老板或公司
 
-- **公司的正式名称**：看 T4、ROE 或工资单上印的名字，常常和店名不一样。不知道就写你知道的；可以在 OrgBook BC 免费查登记名称。[来源: orgbook]
+- **公司的正式名称**：看 T4、ROE 或工资单上印的名字，常常和店名不一样。不知道就写你知道的；可以在 OrgBook BC 免费查登记名称（ https://orgbook.gov.bc.ca/ ）。[来源: orgbook]
 - 公司还用过别的名字（店名、招牌）另有一栏。
 - 有几种情况可以勾选：店已经关了、店在卖或已经卖掉、老板有财务困难、你给不止一家公司干活或由不止一家付钱、你被当成合同工。知道的就勾，不确定的在第 6 部分补充说明里写「不确定」。
 - 老板有没有给你安排住处，单独问一句。
@@ -40,7 +40,7 @@
 - **还在不在那里上班**、是不是外籍工人（表上的定义：不是加拿大公民或永久居民的人）、通过哪个外劳项目被雇用、当时有没有加入工会。
 - **工资标准**：照表上的例子写，例如「$18 一小时」「每月 $800」；有提成、按件算的也写上。
 - **平均每周上多少小时**是三档选择；上班时间另有一栏用文字描述。
-- **有没有低于最低工资**：最低工资每年 6 月 1 日调整，现在的数字看官网最低工资页。[来源: min-wage]
+- **有没有低于最低工资**：最低工资每年 6 月 1 日调整，现在的数字看官网最低工资页（ https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/wages/minimum-wage ）。[来源: min-wage]
 - **工资怎么发**：现金、支票、直接存入、电子转账、其他，勾你收到过的方式。有没有收到过工资单单独问。
 - **为什么离开**：辞职、被开除、被裁员或停工、季节性工作结束、其他，照实选。
 
@@ -63,7 +63,7 @@
 
 - 按项目填估计的金额，**有才填**；官方明写可以填一个范围。项目和第 5 部分的类别对应，最后一栏是合计。
 - **不会算没关系。** 写你知道的就行，例如「3 月到 5 月的工资都没拿到」；具体金额由 ESB 核算。
-- 想了解加班费的一般规则，看官网的加班页。[来源: overtime-page]
+- 想了解加班费的一般规则，看官网的加班页（ https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/hours/overtime-pay ）。[来源: overtime-page]
 - **补充说明**那一栏适合写表上选项说不清的事：记不清、写了「大约」的日期；公司名字混乱或不止一家；特别的发工资方式（一部分现金、一部分转账）；工时或工资算法比较复杂。
 
 ## 提交之后

@@ -6,7 +6,7 @@
 
 ## 雇主的正式名称
 
-看工资单、T4、ROE、支票、转账记录上显示的名字，店里挂的营业执照。店名常常不是公司名。OrgBook BC 可以免费查登记名称。[来源: orgbook] 不知道也不阻塞投诉，先写店名。
+看工资单、T4、ROE、支票、转账记录上显示的名字，店里挂的营业执照。店名常常不是公司名。OrgBook BC 可以免费查登记名称（ https://orgbook.gov.bc.ca/ ）。[来源: orgbook] 不知道也不阻塞投诉，先写店名。
 
 ## 老板个人可能也要负责
 
@@ -30,11 +30,11 @@
 
 ## 要等多久
 
-官网说可能要几个月。[来源: esb-process] 有争议、要走到正式裁定的会久得多：公开裁决里有从投诉到裁定超过两年的例子。别让它耽误别的事（找工作、EI）。这一段的「更久」是从公开裁决看到的，不是官方给的数字。
+官网说可能要几个月（投诉流程页 https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/complaint-process ）。[来源: esb-process] 有争议、要走到正式裁定的会久得多：公开裁决里有从投诉到裁定超过两年的例子。别让它耽误别的事（找工作、EI）。这一段的「更久」是从公开裁决看到的，不是官方给的数字。
 
 ## 有话想问 ESB
 
-免费电话 1-833-236-3700，可以用中文找人帮忙。[来源: esb-contact]
+免费电话 1-833-236-3700，可以用中文找人帮忙（联系页 https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/contact-us ）。[来源: esb-contact]
 
 ## 不在本 skill 范围的途径（各有各的期限，尽早问法律诊所）
 
