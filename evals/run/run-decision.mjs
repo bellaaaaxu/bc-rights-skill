@@ -10,6 +10,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } fr
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { findClaude } from './find-claude.mjs';
 
 const args = process.argv.slice(2);
 const opt = (n) => (args.includes(n) ? args[args.indexOf(n) + 1] : undefined);
@@ -25,7 +26,7 @@ const narrative = readFileSync(join(caseDir, 'narrative.md'), 'utf8');
 const facts = readFileSync(join(caseDir, 'facts.md'), 'utf8');
 const todayLine = narrative.split('\n').find((l) => l.startsWith('今天：')) ?? '';
 const today = todayLine.replace('今天：', '').trim() || new Date().toLocaleDateString('en-CA');
-const claude = process.env.CLAUDE_BIN ?? join(homedir(), '.local', 'bin', process.platform === 'win32' ? 'claude.exe' : 'claude');
+const claude = findClaude();
 const stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15);
 const out = join(root, '.local', 'eval-runs', stamp, 'decision', caseId);
 
@@ -53,7 +54,7 @@ const helperArgv = (msg, session) => ['-p', msg, '--system-prompt', HELPER_SYSTE
 const playerArgv = (msg) => ['-p', msg, '--system-prompt', PLAYER_SYSTEM, '--setting-sources', 'project', '--strict-mcp-config', '--tools', '', '--no-session-persistence', '--max-budget-usd', '1', '--output-format', 'json', ...(model ? ['--model', model] : [])];
 
 if (dry) {
-  console.log(`case ${caseId}, today ${today}, max ${maxTurns} turns`);
+  console.log(`case ${caseId}, today ${today}, max ${maxTurns} turns, claude binary ${claude}`);
   console.log(`helper: claude ${helperArgv('<narrative>', null).map((a) => JSON.stringify(a)).join(' ')}`);
   console.log(`player: claude ${playerArgv('<transcript + last helper message>').map((a) => JSON.stringify(a)).join(' ')}`);
   process.exit(0);

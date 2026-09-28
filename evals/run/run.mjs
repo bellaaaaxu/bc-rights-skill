@@ -13,6 +13,7 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { autoChecks } from './checks.mjs';
+import { findClaude } from './find-claude.mjs';
 
 const args = process.argv.slice(2);
 const opt = (n) => (args.includes(n) ? args[args.indexOf(n) + 1] : undefined);
@@ -26,8 +27,9 @@ for (const a of arms) if (!['bare', 'skill', 'fallback'].includes(a)) { console.
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const cases = readFileSync(join(root, 'evals', set, 'cases.jsonl'), 'utf8').trim().split('\n').map(JSON.parse).filter((c) => !only || only.includes(c.id));
-const claude = process.env.CLAUDE_BIN ?? join(homedir(), '.local', 'bin', process.platform === 'win32' ? 'claude.exe' : 'claude');
+const claude = findClaude();
 const today = new Date().toLocaleDateString('en-CA');
+if (dry) console.log(`claude binary: ${claude}${model ? ` (model ${model})` : ' (CLI default model)'}`);
 const SYSTEM = `You are an AI assistant. Today's date is ${today}. Use the tools and skills you have when they would make your answer more accurate or more up to date.`;
 const stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15);
 const out = join(root, '.local', 'eval-runs', stamp);
