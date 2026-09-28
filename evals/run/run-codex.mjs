@@ -36,12 +36,15 @@ const allowedUrlPrefixes = sources.sources.filter((s) => s.url).map((s) => s.url
 
 // Which skill folders must be hidden for an arm. Restored in `finally`.
 const hideFor = { bare: [join(agentsSkills, 'bc-unpaid-wages'), join(agentsSkills, 'canada-employment-law'), join(claudeSkills, 'canada-employment-law')], skill: [], fallback: [join(agentsSkills, 'canada-employment-law'), join(claudeSkills, 'canada-employment-law')] };
+// Codex discovers a skill by scanning every subfolder of the skills root for a SKILL.md, whatever the folder is
+// called, so renaming in place does not hide it. Move the folder out of the root (to <root>/../.hidden-by-eval/).
+const parking = (p) => join(p, '..', '..', '.hidden-by-eval', p.split(/[\\/]/).pop());
 function hide(paths) {
   const moved = [];
-  for (const p of paths) if (existsSync(p)) { renameSync(p, p + '.hidden-by-eval'); moved.push(p); }
+  for (const p of paths) if (existsSync(p)) { mkdirSync(join(parking(p), '..'), { recursive: true }); renameSync(p, parking(p)); moved.push(p); }
   return moved;
 }
-function restore(moved) { for (const p of moved) if (existsSync(p + '.hidden-by-eval')) renameSync(p + '.hidden-by-eval', p); }
+function restore(moved) { for (const p of moved) if (existsSync(parking(p))) renameSync(parking(p), p); }
 
 // The prompt goes in on stdin ("-"), so no user text has to survive cmd.exe quoting.
 const argv = (lastFile, cwd) => ['exec', '--skip-git-repo-check', '--ephemeral', '-s', 'read-only', '--json', '-o', lastFile, '-C', cwd, ...(model ? ['-m', model] : []), '-'];
