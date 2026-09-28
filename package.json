@@ -1,0 +1,16 @@
+{
+  "name": "bc-rights-skill",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agent skills that walk a person through official procedures in British Columbia. v0.1: unpaid wages complaint to the Employment Standards Branch.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test tests/",
+    "check": "node scripts/check-sources.mjs",
+    "accept": "node scripts/check-sources.mjs --accept",
+    "validate": "node scripts/validate.mjs",
+    "eval": "node evals/run/run.mjs"
+  },
+  "license": "MIT"
+}
