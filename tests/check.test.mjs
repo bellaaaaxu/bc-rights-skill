@@ -1,0 +1,56 @@
+// tests/check.test.mjs
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { evaluate, applyResults } from '../scripts/lib/check.mjs';
+
+const today = '2026-10-05';
+const sources = () => ({
+  fail_closed_after_days: 180,
+  sources: [
+    { id: 'p', type: 'phrases', url: 'u1', phrases: ['within 6 months', 'no fee'], used_in: ['01'], baseline: null, last_checked: null, last_human_verified: '2026-09-27', status: 'ok' },
+    { id: 'h', type: 'hash', url: 'u2', used_in: ['05'], baseline: 'abc', last_checked: null, last_human_verified: '2026-09-27', status: 'ok' },
+    { id: 'r', type: 'reachable', url: 'u3', used_in: ['01'], baseline: null, last_checked: null, last_human_verified: '2026-09-27', status: 'ok' },
+    { id: 'laws', type: 'law', sections: [['96113_01', '74']], used_in: ['01'], baseline: { '96113_01:74': 'old' }, last_checked: null, last_human_verified: '2026-09-27', status: 'ok' },
+  ],
+});
+const io = (over = {}) => ({
+  get: async (url) => ({ u1: 'Complaints must be filed within 6 months. There is no fee.', u2: 'FILE', u3: 'ok' }[url] ?? (() => { throw new Error('HTTP 404'); })()),
+  sha: (s) => (s === 'FILE' ? 'abc' : 'law-' + s),
+  law: async () => ({ text: 'same', current_to: '2026-09-22' }),
+  ...over,
+});
+
+test('everything unchanged: all ok', async () => {
+  const r = await evaluate(sources(), io({ sha: (s) => (s === 'FILE' ? 'abc' : 'old') }));
+  assert.deepEqual(r.map((x) => x.status), ['ok', 'ok', 'ok', 'ok']);
+});
+
+test('a missing phrase, a changed file, an unreachable page and a changed section are each flagged', async () => {
+  const r = await evaluate(sources(), io({
+    get: async (url) => ({ u1: 'Complaints must be filed within 12 months.', u2: 'OTHER' }[url] ?? (() => { throw new Error('HTTP 500'); })()),
+  }));
+  assert.deepEqual(r.map((x) => x.status), ['changed', 'changed', 'error', 'changed']);
+  assert.match(r[0].detail, /no fee/);
+});
+
+test('applyResults moves last_checked on every run, and last_human_verified plus baseline only on accept', async () => {
+  const src = sources();
+  const results = await evaluate(src, io());
+  const plain = applyResults(src, results, today, false);
+  assert.equal(plain.sources[1].last_checked, today);
+  assert.equal(plain.sources[1].last_human_verified, '2026-09-27');
+  assert.equal(plain.sources[3].status, 'changed');
+  assert.deepEqual(plain.sources[3].baseline, { '96113_01:74': 'old' });
+  const accepted = applyResults(src, results, today, true);
+  assert.equal(accepted.sources[3].last_human_verified, today);
+  assert.equal(accepted.sources[3].status, 'ok');
+  assert.deepEqual(accepted.sources[3].baseline, { '96113_01:74': 'law-same' });
+});
+
+test('an error is never accepted as verified', async () => {
+  const src = sources();
+  const results = await evaluate(src, io({ get: async () => { throw new Error('HTTP 500'); } }));
+  const accepted = applyResults(src, results, today, true);
+  assert.equal(accepted.sources[0].status, 'error');
+  assert.equal(accepted.sources[0].last_human_verified, '2026-09-27');
+});
