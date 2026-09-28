@@ -7,9 +7,12 @@
       "what": "ESB complaint form PDF (REV 2025-08-26)",
       "url": "https://www2.gov.bc.ca/assets/gov/employment-business-and-economic-development/employment-standards-workplace-safety/employment-standards/forms/complaint_form.pdf",
       "type": "hash",
-      "used_in": ["02-first-action", "05-form"],
+      "used_in": [
+        "02-first-action",
+        "05-form"
+      ],
       "baseline": null,
-      "last_checked": null,
+      "last_checked": "2026-09-27",
       "last_human_verified": "2026-09-27",
       "status": "new"
     }
