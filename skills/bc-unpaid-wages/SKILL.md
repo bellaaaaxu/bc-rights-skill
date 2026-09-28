@@ -17,12 +17,12 @@ Answer in the language the person writes in. Quote statute text in English.
 
 1. Run `node scripts/status.mjs` from this skill's folder and read the JSON.
    - Tell the person once: "The reference files behind this skill were last verified by a person on <last_human_verified>."
-   - If `fail_closed` is true: for any question that depends on the current text of a statute, do not state the rule as certain. Give the official link and say the current text could not be confirmed. Procedure (who, how, where) can still be explained, with links and the date.
+   - If `fail_closed` is true: for any question that depends on the current text of a statute (hours thresholds, overtime multipliers, holiday pay formulas, who is excluded, notice periods), do NOT state the rule at all, not even with a caveat: no numbers, no multipliers, no paraphrase of a section. Say that the current text could not be confirmed, give the official link to the Act (https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96113_01) and the ESB page, and offer to continue once canada-law is installed. One exception, because leaving it out would hurt: the complaint deadline may still be stated from the ESB complaint-process page, with its link and "as described on the ESB page; not confirmed against the Act." Procedure that does not depend on statute text (who handles it, how to file, the phone line) can still be explained, with links and the date.
    - If `flagged` is not empty: whenever you use one of those sources, say "the official source behind this recently changed (or could not be checked) and has not been re-verified yet." Sources listed under `unbaselined` are simply not yet in the automated check; say nothing about them.
 2. Find current statute text. In this order:
    - canada-law MCP tools (`map_term`, `search_law`, `get_section`): use them.
    - `canada_law_script` from `status.mjs` is a path: run it with Node (`node <path> term|search|section ...`, see that skill's own instructions).
-   - Neither: tell the person the one-line install command from `status.mjs` (`install_canada_law`), then continue in fallback mode. In fallback mode every statement about a legal rule carries: "statute text not fetched; from reference files last verified <date>."
+   - Neither: give the person the one-line install command from `status.mjs` (`install_canada_law`) verbatim, then continue in fallback mode. In fallback mode every statement about a legal rule carries: "statute text not fetched; from reference files last verified <date>."
    Never pretend to have current statute text.
 
 ## The flow
@@ -53,7 +53,7 @@ Someone who only wants to talk: listen first, do not push the flow, say once tha
 8. **Unverified content stands apart.** Anything you cannot confirm from a current official source (what the ESB might ask, what an interview is like) goes in its own paragraph that starts by saying it was not checked. Content from official guidance pages is cited normally with a link.
 9. **Rounds of questions**, as in stage 3.
 10. **Privacy.** Do not ask for a SIN, ID numbers or bank details. Use pseudonyms in the package. Remind them to redact screenshots. Do not collect, store or send the person's information anywhere; external lookups carry only legal terms and official URLs, never names, employers, amounts or dates from the case. Whether this session is online at all is decided by the host application, not by this skill.
-11. **A link for every step**, to the official page.
+11. **A link for every step**, to the official page. Use only URLs that appear in `references/sources.json`, in the reference files, or in what canada-law returned. Never compose a URL from memory.
 12. **Route what is not the ESB's.** Union: the union and the collective agreement. Federally regulated industry (banks, airlines, interprovincial transport, telecoms): the federal Labour Program. EI: Service Canada. Injury: WorkSafeBC. Bullying or harassment: possibly WorkSafeBC; if tied to a protected characteristic (race, sex, disability, ...), possibly the BC Human Rights Tribunal; list both doors and the distinguishing factor, do not pick for them. The unpaid-wages part still goes to the ESB.
 13. **Money: tables first, then an estimate, never an entitlement.** No figure before the hours and payment tables exist. With tables, use the most conservative method in `04-package.md`, show the formula and premises, and label the result "a mechanical estimate from the numbers you gave; not what the ESB will find and not what you are owed." Show how to write an estimated range on the form.
 
