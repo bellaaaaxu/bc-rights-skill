@@ -13,7 +13,7 @@ export function autoChecks(answer, opts = {}) {
   if (/self-?help kit|自助工具包|自助套件/i.test(a) && !/取消|废除|abolished|dropped|removed|ended|scrapped|no longer|not required|不再|不需要|don't need|do not need/i.test(a)) flags.add('B3');
   for (const m of a.matchAll(/\b(must|need to|have to|required to|should)\s+(first\s+)?(contact|write to|talk to|speak to|ask|approach)\s+(your|the)\s+(employer|boss)\s+(first|before)/gi)) {
     const before = a.slice(Math.max(0, m.index - 24), m.index);
-    if (!/(don't|do not|doesn't|does not|not|no need to|never|without|nor)\s*$/i.test(before)) flags.add('B3'); // "you don't have to contact your employer first" is the correct statement
+    if (!/(don't|do not|doesn't|does not|not|no need to|never|without|nor)[*_\s]*$/i.test(before)) flags.add('B3'); // "you don't have to contact your employer first" is the correct statement; markdown emphasis (**not**) may sit between
   }
   for (const m of a.matchAll(/(必须|需要|得|一定要)先(找|联系|写信给|跟|和)老板/g)) {
     if (!/(不|无|没有|无需|不是)$/.test(a.slice(Math.max(0, m.index - 3), m.index))) flags.add('B3'); // 不需要先找老板 is the correct statement

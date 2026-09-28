@@ -50,3 +50,8 @@ test('negated Chinese forms are not flagged (from the M4 grading pass)', () => {
 test('clean answer has no flags', () => {
   assert.deepEqual(autoChecks('File with the Employment Standards Branch within 6 months of your last day. Filing is free.'), []);
 });
+
+test('B3: negation wrapped in markdown emphasis is still a negation', () => {
+  assert.deepEqual(autoChecks('She does **not** have to contact the employer before filing.'), []);
+  assert.deepEqual(autoChecks('You do _not_ need to contact your boss first.'), []);
+});
