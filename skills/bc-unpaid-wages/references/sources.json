@@ -1,12 +1,34 @@
 {
-  "note": "Official sources the bc-unpaid-wages skill relies on. Two dates per source: last_checked moves on every automated run; last_human_verified moves only when a person has read the source again and run `npm run accept`. fail_closed_after_days (180) is a safety threshold this project chose; it is not a rule of the Employment Standards Branch or of any statute.",
+  "note": "Official sources the bc-unpaid-wages skill relies on. Two dates per source: last_checked moves on every automated run; last_human_verified moves only when a person has read the source again and run `npm run accept`. fail_closed_after_days (180) is a safety threshold this project chose; it is not a rule of the Employment Standards Branch or of any statute. Types: phrases (these key phrases must still be on the page), hash (file unchanged), reachable (page opens), law (statute text of the listed [act_id, section] pairs unchanged, fetched through canada-law).",
   "fail_closed_after_days": 180,
   "sources": [
     {
       "id": "esb-form-pdf",
-      "what": "ESB complaint form PDF (REV 2025-08-26)",
+      "what": "ESB complaint form PDF (REV 2025-08-26): deadline, free, evidence may be requested later, estimates and ranges, help by a third party, confidentiality request, 1-833-236-3700 multilingual help, online / mail / fax / email",
       "url": "https://www2.gov.bc.ca/assets/gov/employment-business-and-economic-development/employment-standards-workplace-safety/employment-standards/forms/complaint_form.pdf",
       "type": "hash",
+      "used_in": [
+        "01-routing-deadlines",
+        "02-first-action",
+        "05-form"
+      ],
+      "baseline": "ee72b17651486b3f4bfd3502a8683a567d41b02033a769dd15e22a56f140be98",
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "esb-submit",
+      "what": "ESB submit-a-complaint page: about 15 minutes, no fee, online entry, sessions expire, case number",
+      "url": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/complaint-process/submit-a-complaint",
+      "type": "phrases",
+      "phrases": [
+        "Takes up to 15",
+        "no fee",
+        "services.labour.gov.bc.ca/Complaints",
+        "sessions expire",
+        "case number"
+      ],
       "used_in": [
         "02-first-action",
         "05-form"
@@ -14,7 +36,525 @@
       "baseline": null,
       "last_checked": "2026-09-27",
       "last_human_verified": "2026-09-27",
-      "status": "new"
+      "status": "ok"
+    },
+    {
+      "id": "esb-process",
+      "what": "ESB complaint-process page: informal resolution is a suggestion, 6 months after employment ends, 1 year back while employed",
+      "url": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/complaint-process",
+      "type": "phrases",
+      "phrases": [
+        "resolve disputes informally",
+        "within 6 months",
+        "1 year"
+      ],
+      "used_in": [
+        "01-routing-deadlines",
+        "02-first-action",
+        "07-traps"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "esb-contact",
+      "what": "ESB contact page: phone, help in your language, hours",
+      "url": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/contact-us",
+      "type": "phrases",
+      "phrases": [
+        "1-833-236-3700",
+        "language of your choice",
+        "7:30"
+      ],
+      "used_in": [
+        "02-first-action",
+        "05-form",
+        "07-traps"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "esb-screen-1",
+      "what": "ESB screening question 1: bullying, harassment and human rights are handled elsewhere",
+      "url": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/complaint-process/question-1",
+      "type": "phrases",
+      "phrases": [
+        "bullying",
+        "Human Rights Tribunal"
+      ],
+      "used_in": [
+        "01-routing-deadlines"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "esb-online-form",
+      "what": "ESB online complaint system opens",
+      "url": "https://services.labour.gov.bc.ca/Complaints/s/",
+      "type": "reachable",
+      "used_in": [
+        "02-first-action",
+        "05-form"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "min-wage",
+      "what": "BC minimum wage page (adjusted every June 1; lists past years)",
+      "url": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/wages/minimum-wage",
+      "type": "phrases",
+      "phrases": [
+        "minimum wage is $18.25"
+      ],
+      "used_in": [
+        "01-routing-deadlines",
+        "05-form"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "overtime-page",
+      "what": "BC overtime pay page",
+      "url": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/hours/overtime-pay",
+      "type": "phrases",
+      "phrases": [
+        "Overtime"
+      ],
+      "used_in": [
+        "05-form"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "worksafebc-bullying",
+      "what": "WorkSafeBC bullying and harassment page: report to the employer first",
+      "url": "https://www.worksafebc.com/en/health-safety/hazards-exposures/bullying-harassment",
+      "type": "phrases",
+      "phrases": [
+        "bullying",
+        "employer"
+      ],
+      "used_in": [
+        "01-routing-deadlines"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "worksafebc-injury",
+      "what": "WorkSafeBC report an injury page opens",
+      "url": "https://www.worksafebc.com/en/claims/report-workplace-injury-illness",
+      "type": "reachable",
+      "used_in": [
+        "01-routing-deadlines"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "service-canada-ei",
+      "what": "Service Canada EI page opens",
+      "url": "https://www.canada.ca/en/services/benefits/ei.html",
+      "type": "reachable",
+      "used_in": [
+        "01-routing-deadlines",
+        "02-first-action"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "cra-taxes",
+      "what": "CRA taxes page opens",
+      "url": "https://www.canada.ca/en/services/taxes.html",
+      "type": "reachable",
+      "used_in": [
+        "01-routing-deadlines"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "bchrt",
+      "what": "BC Human Rights Tribunal site opens",
+      "url": "https://www.bchrt.bc.ca/",
+      "type": "reachable",
+      "used_in": [
+        "01-routing-deadlines"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "labour-program",
+      "what": "Federal Labour Program complaint page opens",
+      "url": "https://www.canada.ca/en/services/jobs/workplace/federal-labour-standards/filing-complaint.html",
+      "type": "reachable",
+      "used_in": [
+        "01-routing-deadlines"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "self-help-kit-news",
+      "what": "BC government news release (2019): the Self-Help Kit requirement ended",
+      "url": "https://archive.news.gov.bc.ca/releases/news_releases_2017-2021/2019LBR0023-001663.htm",
+      "type": "phrases",
+      "phrases": [
+        "self-help kit"
+      ],
+      "used_in": [
+        "02-first-action"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "ei-apply",
+      "what": "EI application page: apply as soon as you stop working, more than 4 weeks may cost benefits, documents can follow",
+      "url": "https://www.canada.ca/en/services/benefits/ei/ei-regular-benefit/apply.html",
+      "type": "phrases",
+      "phrases": [
+        "4 weeks",
+        "after you apply"
+      ],
+      "used_in": [
+        "02-first-action"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "orgbook",
+      "what": "OrgBook BC (free registry lookup) opens",
+      "url": "https://orgbook.gov.bc.ca/",
+      "type": "reachable",
+      "used_in": [
+        "05-form",
+        "07-traps"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "esb-igm-updates",
+      "what": "ESB interpretation guidelines: list of updates by effective date (from 2021-05-19)",
+      "url": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/forms-resources/igm/updates",
+      "type": "reachable",
+      "used_in": [
+        "01-routing-deadlines"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "bc-news-sick-leave",
+      "what": "BC government news release (2021PREM0073-002235): 5 paid sick days from 2022-01-01",
+      "url": "https://news.gov.bc.ca/releases/2021PREM0073-002235",
+      "type": "reachable",
+      "used_in": [
+        "01-routing-deadlines"
+      ],
+      "baseline": null,
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "laws-esa",
+      "what": "Employment Standards Act sections the reference files paraphrase",
+      "type": "law",
+      "sections": [
+        [
+          "96113_01",
+          "1"
+        ],
+        [
+          "96113_01",
+          "3"
+        ],
+        [
+          "96113_01",
+          "4"
+        ],
+        [
+          "96113_01",
+          "8"
+        ],
+        [
+          "96113_01",
+          "10"
+        ],
+        [
+          "96113_01",
+          "16"
+        ],
+        [
+          "96113_01",
+          "17"
+        ],
+        [
+          "96113_01",
+          "18"
+        ],
+        [
+          "96113_01",
+          "20"
+        ],
+        [
+          "96113_01",
+          "21"
+        ],
+        [
+          "96113_01",
+          "22"
+        ],
+        [
+          "96113_01",
+          "30.3"
+        ],
+        [
+          "96113_01",
+          "30.4"
+        ],
+        [
+          "96113_01",
+          "34"
+        ],
+        [
+          "96113_01",
+          "37"
+        ],
+        [
+          "96113_01",
+          "40"
+        ],
+        [
+          "96113_01",
+          "44"
+        ],
+        [
+          "96113_01",
+          "45"
+        ],
+        [
+          "96113_01",
+          "46"
+        ],
+        [
+          "96113_01",
+          "49.1"
+        ],
+        [
+          "96113_01",
+          "57"
+        ],
+        [
+          "96113_01",
+          "58"
+        ],
+        [
+          "96113_01",
+          "63"
+        ],
+        [
+          "96113_01",
+          "66"
+        ],
+        [
+          "96113_01",
+          "74"
+        ],
+        [
+          "96113_01",
+          "75"
+        ],
+        [
+          "96113_01",
+          "80"
+        ],
+        [
+          "96113_01",
+          "83"
+        ],
+        [
+          "96113_01",
+          "88"
+        ],
+        [
+          "96113_01",
+          "96"
+        ],
+        [
+          "96113_01",
+          "97"
+        ]
+      ],
+      "used_in": [
+        "01-routing-deadlines",
+        "02-first-action",
+        "03-intake",
+        "04-package",
+        "06-employer-says",
+        "07-traps"
+      ],
+      "baseline": {
+        "96113_01:1": "9fd8fac5fe9b094d695604de701acf14822060f0da1a8f0f3070ce06f34baa87",
+        "96113_01:3": "3f46ad5968285e2ed043a6b65c0ee7d66676c21ca6892ee353271f2e57952b09",
+        "96113_01:4": "d910b343dab901fae364e5a311d9322548b7498834a77d2a108969e3c7572bbd",
+        "96113_01:8": "e1c209cf32ff85d753d6633ee23eb2199ad543db3f75c1171b7313eac9afcac5",
+        "96113_01:10": "1795eba7922c034d6d80db0297f83a31d7258fdbcf0ca0dabf6d6841365bd44c",
+        "96113_01:16": "1f5f273c121fcfccfb36013575b740e007253f96bd227bfd425d0d795fe3bbbe",
+        "96113_01:17": "c4531b91dc1798e3717c49678c4a57c68248283e8cba8c5471f66c6702019033",
+        "96113_01:18": "1f552d02dfef8e879fbcf191c14bb21144107504cdd3dea9adcb76dbc941d943",
+        "96113_01:20": "ded56e6288e0e00125bb6fb7dfdcfb5f6de2e03abfb31ac517b6691bd7d6ab92",
+        "96113_01:21": "6748627150476b43e507480052c57c0c96cf606266d3f6dd3753560c3080f3df",
+        "96113_01:22": "e13631b112590cf0ef4d144d7e5dcaf6294295c808cd26fa5358e090c1c38e9a",
+        "96113_01:30.3": "a42ba1ae7261b7cca06d861af1c4895ab0b8855ec8fd4cc720dcf86a548eddb3",
+        "96113_01:30.4": "1a71044f8388904c1e5ad876edfcd80ed9faa6c3a93850a3f3e50c9c43a6062f",
+        "96113_01:34": "e5db2f5aa2be04a7428d8b3bcd0543eb71b00281a36cf3f9617145a920aa57f9",
+        "96113_01:37": "5dccf802c837382033c52f091dfacb31205d5b4ddfef19d47193db2c7f3b2a26",
+        "96113_01:40": "2df4f3c6d7edbd5d20a1d6b9e90a924dd9f3b8837daf00d69c4abb6e9474e5d7",
+        "96113_01:44": "cf6f5bacf90b01a29cb354507773b784b0842d633892c83f5b49d97fab3666b7",
+        "96113_01:45": "d1ade55d64fcef14885886a89c92db31a7aaebe1788fdd9c33e4b1b20aeae30c",
+        "96113_01:46": "eea1fdfee928e8f81ff899c3722ccc52209a407cc93499db221ef6a87c8855a9",
+        "96113_01:49.1": "7ec869079a28f6c7e2c703d712ea4db6748badcc0d22e0f5c2445f78bdc3cb15",
+        "96113_01:57": "b40cdc60aeb7e7379109e957e5c059e1e51506fbf191af2f429b407c22edc143",
+        "96113_01:58": "22171ea2bf421f348e954b2c0a43fcbe72e6486e2fc4a7251067a83a19b141e5",
+        "96113_01:63": "f98d7cf7bf872b35da87165287b43ff402627f034864aa78e49ef6b0002d5642",
+        "96113_01:66": "86473815abede605ce4915abc06b6ffc3a7b10808c30702c44c77c03bb7450e3",
+        "96113_01:74": "d58615d2613192c858e141faa7cd479a6ed89161a64c486c1d5f83ce90e7177d",
+        "96113_01:75": "6f8f5e51d66afe2b90a40bf102e57fb7e523e4406c7a33a7349ed28be3cc7c9e",
+        "96113_01:80": "5a64b6ba0642051920851a2e17e728babe16e16ce620b912a105640a3ea086b8",
+        "96113_01:83": "6b5781f21a368bf72abff0069c022710a3c133e1281af351d190d37aa3f9d7b2",
+        "96113_01:88": "80864d9b1bfddcf15903bb00debe9b39a2d9ab090371e249b990c1d7c2478315",
+        "96113_01:96": "32ce523a3c471ef0dd82ed9a1ec14b81b6d1edf337c69e24dc22254c33298c84",
+        "96113_01:97": "82e14e3f09fa8807c3e8850aeab538c4502737329b3732472a95ecdd693f0b92"
+      },
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "laws-esr",
+      "what": "Employment Standards Regulation sections the reference files paraphrase",
+      "type": "law",
+      "sections": [
+        [
+          "396_95",
+          "1"
+        ],
+        [
+          "396_95",
+          "31"
+        ],
+        [
+          "396_95",
+          "32"
+        ],
+        [
+          "396_95",
+          "34"
+        ],
+        [
+          "396_95",
+          "36"
+        ],
+        [
+          "396_95",
+          "45.031"
+        ]
+      ],
+      "used_in": [
+        "01-routing-deadlines",
+        "03-intake",
+        "06-employer-says"
+      ],
+      "baseline": {
+        "396_95:1": "142cb35f3f7762ec83ba5deb3d4e7312be59d56c2fe91057841e42d7b573a5e1",
+        "396_95:31": "b03c96aba6cb8ced48e68988f4e46cc08ec241f48886168691f721e106f0ba05",
+        "396_95:32": "0a80230b58ad34437673c337888e4237db490d63343026a6acef005c45e03ca3",
+        "396_95:34": "20d061260a371bb37da3551d7c72f00c45311cf935a96124f46b0df29a1384c6",
+        "396_95:36": "7eda8649769de52651de4a481854f0055e8f11261b5928a066e4710d4f5cb44e",
+        "396_95:45.031": "471eb6a428ac4dd95ebb5ec74003592bda2dc54fcc3ffad971b35b0f93be7c0f"
+      },
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
+    },
+    {
+      "id": "laws-other",
+      "what": "Temporary Foreign Worker Protection Act s.20, 21, 33 and Employment Insurance Act s.29",
+      "type": "law",
+      "sections": [
+        [
+          "18045",
+          "20"
+        ],
+        [
+          "18045",
+          "21"
+        ],
+        [
+          "18045",
+          "33"
+        ],
+        [
+          "E-5.6",
+          "29"
+        ]
+      ],
+      "used_in": [
+        "01-routing-deadlines",
+        "02-first-action"
+      ],
+      "baseline": {
+        "18045:20": "e2ed53b2f5316763ae0dcbbf003e1292cd49d6ad1864517611f0fb9c1e606e72",
+        "18045:21": "6c5163be9a58de539a216cffb7139d56ea619d6908c651bf3fffe858ee16ccf8",
+        "18045:33": "cbee074ff2f0a77bb9ddf7ee1325b285047a7a9208a7db3ed866f2ce26b693d4",
+        "E-5.6:29": "67ba04209a556cb9122a33c6e90ce764df43d9a54983251dcede6ba517933a3e"
+      },
+      "last_checked": "2026-09-27",
+      "last_human_verified": "2026-09-27",
+      "status": "ok"
     }
   ]
 }
