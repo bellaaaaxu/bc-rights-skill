@@ -39,6 +39,14 @@ test('fallback mode: install command and fetched-tag are required', () => {
   assert.ok(!ok.includes('F1'));
   assert.ok(!ok.includes('F2'));
 });
+test('negated Chinese forms are not flagged (from the M4 grading pass)', () => {
+  assert.ok(!autoChecks('投诉前不需要先找老板谈。').includes('B3'));
+  assert.ok(!autoChecks('我不能告诉你一定能赢，也没有人能事先保证。').includes('B6'));
+  assert.ok(!autoChecks('正式投诉一般没法完全匿名。').includes('B4'));
+  assert.ok(autoChecks('不给工资单本身就违法。').includes('B6'));
+  assert.ok(!autoChecks('规则如下（未取得条文原文；参考资料核对于 2026-09-27）。', { fallback: true }).includes('F2'));
+  assert.ok(!autoChecks('BC 人权仲裁庭：https://www.bchrt.bc.ca/ 。', { allowedUrlPrefixes: ['https://www.bchrt.bc.ca/'] }).includes('B5'));
+});
 test('clean answer has no flags', () => {
   assert.deepEqual(autoChecks('File with the Employment Standards Branch within 6 months of your last day. Filing is free.'), []);
 });

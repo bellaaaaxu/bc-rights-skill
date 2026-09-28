@@ -43,12 +43,17 @@ function hide(paths) {
 }
 function restore(moved) { for (const p of moved) if (existsSync(p + '.hidden-by-eval')) renameSync(p + '.hidden-by-eval', p); }
 
-const argv = (q, lastFile, cwd) => ['exec', '--skip-git-repo-check', '--ephemeral', '-s', 'read-only', '--json', '-o', lastFile, '-C', cwd, ...(model ? ['-m', model] : []), q];
+// The prompt goes in on stdin ("-"), so no user text has to survive cmd.exe quoting.
+const argv = (lastFile, cwd) => ['exec', '--skip-git-repo-check', '--ephemeral', '-s', 'read-only', '--json', '-o', lastFile, '-C', cwd, ...(model ? ['-m', model] : []), '-'];
+const quote = (s) => `"${String(s).replace(/"/g, '\\"')}"`;
 
 function summarise(jsonl, last) {
   const ev = jsonl.split('\n').flatMap((l) => { try { return [JSON.parse(l)]; } catch { return []; } });
   const text = jsonl;
-  const tokens = ev.map((e) => e?.usage?.total_tokens ?? e?.info?.total_token_usage?.total_tokens ?? null).filter((n) => n !== null).pop() ?? null;
+  // Codex --json: look for any usage object with input/output token counts and take the last one seen.
+  const usages = ev.map((e) => e?.usage ?? e?.info?.total_token_usage ?? e?.item?.usage ?? null).filter(Boolean);
+  const last = usages[usages.length - 1];
+  const tokens = last ? (last.total_tokens ?? ((last.input_tokens ?? 0) + (last.output_tokens ?? 0)) || null) : null;
   return {
     model: ev.find((e) => e?.model)?.model ?? null,
     skill_used: /bc-unpaid-wages[\\/]+SKILL\.md/.test(text),
@@ -70,12 +75,11 @@ for (const arm of arms) {
   try {
     for (const c of cases) {
       const lastFile = join(out, 'runs', `${c.id}-${arm}.last.md`);
-      if (dry) { console.log(`${c.id} ${arm}: codex ${argv(c.q, lastFile, cwd).map((a) => JSON.stringify(a)).join(' ')}`); continue; }
+      if (dry) { console.log(`${c.id} ${arm}: codex ${argv(lastFile, cwd).map((a) => JSON.stringify(a)).join(' ')}  <<< prompt on stdin`); continue; }
       mkdirSync(join(out, 'runs'), { recursive: true });
       mkdirSync(join(out, 'blind'), { recursive: true });
-      const r = process.platform === 'win32'
-        ? spawnSync('cmd.exe', ['/d', '/s', '/c', [`"${codex}"`, ...argv(c.q, lastFile, cwd).map((a) => `"${a.replace(/"/g, '""')}"`)].join(' ')], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 15 * 60 * 1000, stdio: ['ignore', 'pipe', 'pipe'] })
-        : spawnSync(codex, argv(c.q, lastFile, cwd), { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 15 * 60 * 1000, stdio: ['ignore', 'pipe', 'pipe'] });
+      const cmd = [quote(codex), ...argv(lastFile, cwd).map(quote)].join(' ');
+      const r = spawnSync(cmd, { shell: true, input: c.q, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 15 * 60 * 1000 });
       const jsonl = r.stdout ?? '';
       writeFileSync(join(out, 'runs', `${c.id}-${arm}.jsonl`), jsonl + (r.stderr ? `\n#stderr\n${r.stderr}` : ''));
       const last = existsSync(lastFile) ? readFileSync(lastFile, 'utf8') : '(no last message)';
@@ -84,7 +88,9 @@ for (const arm of arms) {
       writeFileSync(join(out, 'blind', `${key}.md`), `# ${key}\n\n**Question:** ${c.q}\n\n---\n\n${s.answer}\n`);
       const auto = autoChecks(s.answer, { allowedUrlPrefixes, fallback: arm === 'fallback' });
       mapping.push({ key, case: c.id, set, arm, engine: 'codex', ...s, answer: undefined, auto });
-      console.log(`${c.id} ${arm}: ${key} tokens=${s.tokens ?? '?'} skill=${s.skill_used ? 'Y' : 'n'} law=${s.law_fetched ? 'Y' : 'n'} web=${s.web_used ? 'Y' : 'n'} auto=${auto.join(',') || '-'}`);
+      writeFileSync(join(out, 'mapping.json'), JSON.stringify(mapping, null, 2)); // after every answer
+      // The blind key is deliberately not printed: the grader must not see which key belongs to which arm.
+      console.log(`${c.id} ${arm}: tokens=${s.tokens ?? '?'} skill=${s.skill_used ? 'Y' : 'n'} law=${s.law_fetched ? 'Y' : 'n'} web=${s.web_used ? 'Y' : 'n'} auto=${auto.join(',') || '-'}`);
     }
   } finally {
     restore(moved);
