@@ -59,18 +59,24 @@ const quote = (s) => `"${String(s).replace(/"/g, '\\"')}"`;
 
 function summarise(jsonl, last) {
   const ev = jsonl.split('\n').flatMap((l) => { try { return [JSON.parse(l)]; } catch { return []; } });
-  const text = jsonl;
   // Codex --json: look for any usage object with input/output token counts and take the last one seen.
   const usages = ev.map((e) => e?.usage ?? e?.info?.total_token_usage ?? e?.item?.usage ?? null).filter(Boolean);
   const lastUsage = usages[usages.length - 1];
   const summed = lastUsage ? (lastUsage.total_tokens ?? ((lastUsage.input_tokens ?? 0) + (lastUsage.output_tokens ?? 0))) : 0;
   const tokens = summed > 0 ? summed : null;
+  // Judge tool use from the command items, not from the whole log: a bare-arm run once matched "bclaw.mjs" only because
+  // Codex's own memory file (~/.codex/memories, written by the desktop app from imported sessions) mentions it.
+  const items = ev.filter((e) => e.type === 'item.completed' && e.item).map((e) => e.item);
+  const cmds = items.filter((i) => i.type === 'command_execution').map((i) => i.command || '');
+  const mem = (c) => /\.codex[\\/]+memories/i.test(c);
   return {
     model: ev.find((e) => e?.model)?.model ?? null,
-    skill_used: /bc-unpaid-wages[\\/]+SKILL\.md/.test(text),
-    status_run: /status\.mjs/.test(text),
-    law_fetched: /bclaw\.mjs/.test(text),
-    web_used: /web_search|"type":"web_search/i.test(text),
+    skill_used: cmds.some((c) => /bc-unpaid-wages[\\/]+SKILL\.md/i.test(c)),
+    status_run: cmds.some((c) => /status\.mjs/.test(c)),
+    law_fetched: cmds.some((c) => /bclaw\.mjs/.test(c) && !mem(c)),
+    web_used: items.some((i) => /web_search/i.test(i.type || '')),
+    memory_read: cmds.some(mem),
+    commands: cmds.length,
     tokens,
     answer: last,
   };
