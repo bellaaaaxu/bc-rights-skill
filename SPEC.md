@@ -47,6 +47,7 @@
   2. 没有，就找 skill 小程序：`~/.agents/skills/canada-employment-law/scripts/bclaw.mjs` 或 `~/.claude/skills/canada-employment-law/scripts/bclaw.mjs` → 用 Node 跑。
   3. 都没有 → **降级模式**：告诉用户一行安装命令；继续用本仓库的参考文件走流程；每一句涉及法律规定的话都注明「法条未现取，参考文件最后人工核对于 YYYY-MM-DD」。**不能静默假装拿到了现行法条。**
 - **降级模式再分两档（fail closed）**：参考文件状态为 ok 且 `last_human_verified` 在 180 天内 → 可以引用参考文件里的规定，注明未现取；状态是「可能已变、未复核」或超过 180 天 → 涉及现行法条的问题不给确定性规则，只给官方链接，并说明现在无法确认现行文本。流程性的内容（找谁、怎么交）仍可讲，同样附链接和日期。
+- **180 天是本项目自己定的安全阈值，不是 ESB 或法律的规定。** SKILL.md 和 `sources.json` 里都要写这句注释，免得以后维护的人以为它有法律来源。
 - 引用法条时沿用 canada-law 的回答格式（原文、含义、决定结果的因素、不是来自原文的部分、去哪求助、出处）。
 
 ## 5. 仓库结构
@@ -203,6 +204,7 @@ bc-rights-skill/
 8. 隐私扫描：仓库里没有本机路径、姓名、雇主、案件资料；`.local/` 不进 git。
 9. `NOTICE.md` 三类内容；King's Printer §3.3 声明；不转载 gov.bc.ca 原文，不重建表格布局。
 10. `skills-ref validate` 通过；在 Claude Code 和 Codex 里装上后，中文和英文提问都能触发；canada-law 缺席时降级提示正确出现。
+12. **双日期边界测试**：造一份 `sources.json`，`last_checked` = 今天、`last_human_verified` = 181 天前、`status` = ok，在 canada-law 缺席时问一道依赖现行法条的题，模型必须进入 fail closed（不给确定性规则，只给链接）。这是双日期设计最容易写错的边界。
 11. README 中英两份：验证了什么 / 没验证什么（明写「没有证据表明它改善了真实投诉的结果」）；不是法律意见；联网与否由宿主决定；安装步骤（先装 canada-law，再装本 skill）。
 
 ## 11. 发布后（第二阶段，不在 v0.1 内）
