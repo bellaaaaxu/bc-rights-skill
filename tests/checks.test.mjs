@@ -12,6 +12,11 @@ test('flags an invented prerequisite', () => {
 test('does not flag a correct statement that the kit was abolished', () => {
   assert.ok(!autoChecks('The Self-Help Kit was abolished in 2019, so you do not need it.').includes('B3'));
 });
+test('does not flag the negated form (you do not have to contact your employer first)', () => {
+  assert.ok(!autoChecks("You don't have to contact your employer first, have all your proof, or know the exact amount owed.").includes('B3'));
+  assert.ok(!autoChecks('You do not need to talk to your boss before filing.').includes('B3'));
+  assert.ok(autoChecks('You need to talk to your boss before filing.').includes('B3'));
+});
 test('flags a stated entitlement, not a labelled estimate', () => {
   assert.ok(autoChecks('你应得 $3,200 的加班费。').includes('B7'));
   assert.ok(!autoChecks('This is a mechanical estimate from the numbers you gave, about $3,200; it is not what you are owed.').includes('B7'));

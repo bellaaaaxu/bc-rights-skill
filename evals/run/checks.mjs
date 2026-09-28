@@ -11,7 +11,10 @@ export function autoChecks(answer, opts = {}) {
 
   // B3 invented prerequisites
   if (/self-?help kit|自助工具包|自助套件/i.test(a) && !/取消|废除|abolished|no longer|not required|不再|不需要|don't need|do not need/i.test(a)) flags.add('B3');
-  if (/\b(must|need to|have to|required to|should)\s+(first\s+)?(contact|write to|talk to|speak to|ask|approach)\s+(your|the)\s+(employer|boss)\s+(first|before)/i.test(a)) flags.add('B3');
+  for (const m of a.matchAll(/\b(must|need to|have to|required to|should)\s+(first\s+)?(contact|write to|talk to|speak to|ask|approach)\s+(your|the)\s+(employer|boss)\s+(first|before)/gi)) {
+    const before = a.slice(Math.max(0, m.index - 24), m.index);
+    if (!/(don't|do not|doesn't|does not|not|no need to|never|without|nor)\s*$/i.test(before)) flags.add('B3'); // "you don't have to contact your employer first" is the correct statement
+  }
   if (/(必须|需要|得|一定要)先(找|联系|写信给|跟|和)老板/.test(a)) flags.add('B3');
   if (/(必须|需要|一定要)先(收集|准备|备齐|凑齐)(好)?(所有|全部)?(的)?证据/.test(a)) flags.add('B3');
   if (/(必须|需要|一定要)先(算|把账算)(清|出|好)/.test(a)) flags.add('B3');
