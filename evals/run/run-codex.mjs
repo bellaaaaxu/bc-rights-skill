@@ -41,8 +41,10 @@ const claudeSkills = join(homedir(), '.claude', 'skills');
 const sources = JSON.parse(readFileSync(join(root, 'skills', 'bc-unpaid-wages', 'references', 'sources.json'), 'utf8'));
 const allowedUrlPrefixes = sources.sources.filter((s) => s.url).map((s) => s.url);
 
-// Which skill folders must be hidden for an arm. Restored in `finally`.
-const hideFor = { bare: [join(agentsSkills, 'bc-unpaid-wages'), join(agentsSkills, 'canada-employment-law'), join(claudeSkills, 'canada-employment-law')], skill: [], fallback: [join(agentsSkills, 'canada-employment-law'), join(claudeSkills, 'canada-employment-law')] };
+// Which folders must be hidden for an arm. Restored in `finally`. Every arm hides Codex's own memory folder
+// (~/.codex/memories, written by the desktop app from imported sessions): in the M4 sample 10 of 20 runs searched it.
+const codexMemories = join(homedir(), '.codex', 'memories');
+const hideFor = { bare: [join(agentsSkills, 'bc-unpaid-wages'), join(agentsSkills, 'canada-employment-law'), join(claudeSkills, 'canada-employment-law'), codexMemories], skill: [codexMemories], fallback: [join(agentsSkills, 'canada-employment-law'), join(claudeSkills, 'canada-employment-law'), codexMemories] };
 // Codex discovers a skill by scanning every subfolder of the skills root for a SKILL.md, whatever the folder is
 // called, so renaming in place does not hide it. Move the folder out of the root (to <root>/../.hidden-by-eval/).
 const parking = (p) => join(p, '..', '..', '.hidden-by-eval', p.split(/[\\/]/).pop());
@@ -104,7 +106,7 @@ for (const arm of arms) {
       const key = randomBytes(4).toString('hex');
       writeFileSync(join(out, 'blind', `${key}.md`), `# ${key}\n\n**Question:** ${c.q}\n\n---\n\n${s.answer}\n`);
       const auto = autoChecks(s.answer, { allowedUrlPrefixes, fallback: arm === 'fallback' });
-      mapping.push({ key, case: c.id, set, arm, engine: 'codex', ...s, model: modelUsed, effort: effortUsed, answer: undefined, auto });
+      mapping.push({ key, case: c.id, set, arm, engine: 'codex', ...s, model: modelUsed, effort: effortUsed, memories_hidden: moved.includes(codexMemories), answer: undefined, auto });
       writeFileSync(join(out, 'mapping.json'), JSON.stringify(mapping, null, 2)); // after every answer
       // The blind key is deliberately not printed: the grader must not see which key belongs to which arm.
       console.log(`${c.id} ${arm} [${modelUsed} ${effortUsed}]: tokens=${s.tokens ?? '?'} skill=${s.skill_used ? 'Y' : 'n'} law=${s.law_fetched ? 'Y' : 'n'} web=${s.web_used ? 'Y' : 'n'} auto=${auto.join(',') || '-'}`);
