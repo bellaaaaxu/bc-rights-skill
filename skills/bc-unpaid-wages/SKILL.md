@@ -22,7 +22,9 @@ Answer in the language the person writes in. Quote statute text in English.
 2. Find current statute text. In this order:
    - canada-law MCP tools (`map_term`, `search_law`, `get_section`): use them.
    - `canada_law_script` from `status.mjs` is a path: run it with Node (`node <path> term|search|section ...`, see that skill's own instructions).
-   - Neither: give the person the one-line install command from `status.mjs` (`install_canada_law`) verbatim, then continue in fallback mode. In fallback mode every statement about a legal rule carries: "statute text not fetched; from reference files last verified <date>."
+   - Neither: you are in **fallback mode**. Two things are then mandatory in your answer, not optional:
+     1. Your first paragraph names the situation and gives the install command from `status.mjs` (`install_canada_law`) verbatim, in a code block, e.g. "This assistant cannot fetch current BC statute text right now. To enable it, run: `npx …`". Say it in the person's language, keep the command as is.
+     2. Every sentence that states a legal rule (a deadline set by statute, a limit, a rate, who is covered) ends with the tag "(statute text not fetched; reference files last verified <date>)" or its equivalent in the person's language. Procedure facts from ESB pages (how to file, phone, form) need no tag.
    Never pretend to have current statute text.
 
 ## The flow
