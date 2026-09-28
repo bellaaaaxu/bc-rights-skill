@@ -1,0 +1,12 @@
+# 裁决集索引
+
+| 文件夹 | 类别 | 裁决号 | PDF | 裁决日期 | 选用理由（中性） |
+|---|---|---|---|---|---|
+| `2023-BCEST-108` | 辞退补偿 | 2023 BCEST 108 | 原址（2026-09 已下架）https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-108.pdf · 存档 https://web.archive.org/web/20240714184012/https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-108.pdf | 2023-12-06 | 辞退补偿类；裁决对事实与时间线叙述完整，能看出员工当时知道什么 |
+| `2023-BCEST-104` | 辞退补偿 | 2023 BCEST 104 | 原址（已下架）https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-104.pdf · 存档 https://web.archive.org/web/20240714133809/https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-104.pdf | 2023-11-24 | 辞退补偿类，机制与上一例不同；员工与雇主双方陈述都有记录 |
+| `2023-BCEST-109` | 加班 | 2023 BCEST 109 | 原址（已下架）https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-109.pdf · 存档 https://web.archive.org/web/20240714121412/https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-109.pdf | 2023-12-08 | 加班类；证据来源写得清楚，日期便于设定「今天」 |
+| `2025-BCEST-28` | 加班 | 2025 BCEST 28 | 原址（已下架）https://www.bcest.bc.ca/app/uploads/sites/883/2025/03/2025-BCEST-28.pdf · 存档 https://web.archive.org/web/20250322161537/https://www.bcest.bc.ca/app/uploads/sites/883/2025/03/2025-BCEST-28.pdf | 2025-03-06 | 加班类，最近的一例；涉及一条与上一例不同的规则层 |
+| `2023-BCEST-60` | 员工身份争议 | 2023 BCEST 60（复议 2023 BCEST 94） | 原址（已下架）https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-60.pdf · 存档 https://web.archive.org/web/20240714125417/https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-60.pdf · 复议存档 https://web.archive.org/web/20240716081738/https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-94.pdf | 2023-08-08 | 员工／承包商身份类；上诉与复议两份裁决合起来把判断因素写全了 |
+| `2023-BCEST-39` | 扣款 | 2023 BCEST 39 | 原址（已下架）https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-39.pdf · 存档 https://web.archive.org/web/20240715013109/https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-39.pdf | 2023-06-13 | 扣款类；双方对同一份记录的两种读法都有记录，且含一个日期问题 |
+| `2023-BCEST-11` | 提成／池子 | 2023 BCEST 11 | 原址（已下架）https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-11.pdf · 存档 https://web.archive.org/web/20240714145843/https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-11.pdf | 2023-03-15 | 提成与池子类；争点集中在一个报酬条款的性质 |
+| `2023-BCEST-105` | 备选（提成 + 追回期） | 2023 BCEST 105 | 原址（已下架）https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-105.pdf · 存档 https://web.archive.org/web/20240714182952/https://www.bcest.bc.ca/app/uploads/sites/883/2023/03/2023-BCEST-105.pdf | 2023-11-28 | 备选；员工为上诉方，测的规则层与其他七例不重叠 |
