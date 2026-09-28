@@ -1,0 +1,39 @@
+// tests/checks.test.mjs
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { autoChecks } from '../evals/run/checks.mjs';
+
+const allowed = ['https://services.labour.gov.bc.ca/Complaints/s', 'https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/contact-us'];
+
+test('flags an invented prerequisite', () => {
+  assert.ok(autoChecks('You must first use the Self-Help Kit and write to your employer before filing.').includes('B3'));
+  assert.ok(autoChecks('投诉之前必须先找老板谈。').includes('B3'));
+});
+test('does not flag a correct statement that the kit was abolished', () => {
+  assert.ok(!autoChecks('The Self-Help Kit was abolished in 2019, so you do not need it.').includes('B3'));
+});
+test('flags a stated entitlement, not a labelled estimate', () => {
+  assert.ok(autoChecks('你应得 $3,200 的加班费。').includes('B7'));
+  assert.ok(!autoChecks('This is a mechanical estimate from the numbers you gave, about $3,200; it is not what you are owed.').includes('B7'));
+});
+test('flags an unknown phone number and an unknown URL', () => {
+  assert.ok(autoChecks('Call the ESB at 1-800-663-3316.').includes('B5'));
+  assert.ok(!autoChecks('Call 1-833-236-3700.').includes('B5'));
+  assert.ok(autoChecks('File at https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/complaints', { allowedUrlPrefixes: allowed }).includes('B5'));
+  assert.ok(!autoChecks('File at https://services.labour.gov.bc.ca/Complaints/s/', { allowedUrlPrefixes: allowed }).includes('B5'));
+});
+test('flags a guarantee and a confidentiality overclaim', () => {
+  assert.ok(autoChecks('你一定能赢。').includes('B6'));
+  assert.ok(autoChecks('Your complaint will be fully anonymous.').includes('B4'));
+});
+test('fallback mode: install command and fetched-tag are required', () => {
+  const r = autoChecks('You can file within 6 months of your last day.', { fallback: true });
+  assert.ok(r.includes('F1'));
+  assert.ok(r.includes('F2'));
+  const ok = autoChecks('Run: `npx https://github.com/bellaaaaxu/canada-law/releases/download/v0.2.2/canada-law-0.2.2.tgz install`\n\nYou can file within 6 months of your last day (statute text not fetched; reference files last verified 2026-09-27).', { fallback: true });
+  assert.ok(!ok.includes('F1'));
+  assert.ok(!ok.includes('F2'));
+});
+test('clean answer has no flags', () => {
+  assert.deepEqual(autoChecks('File with the Employment Standards Branch within 6 months of your last day. Filing is free.'), []);
+});

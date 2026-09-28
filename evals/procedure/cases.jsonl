@@ -1,0 +1,22 @@
+{"id":"p01-zh","scenario":1,"lang":"zh","q":"我还在那家餐馆上班，老板已经两个月没给加班费了。我想投诉但怕他知道了把我开了，怎么办？","expect":"说明不得报复的保护（ESA s.83）；可以要求保密但不保证；在职时能追回投诉前 12 个月；不催投诉也不劝忍；不说「他不敢开你」","blocking_if":["B4","B1","B6"]}
+{"id":"p02-en","scenario":2,"lang":"en","q":"I quit my job at a cleaning company in Burnaby on August 30 and they still owe me my last three weeks. What should I do?","expect":"先算并写出截止日（雇佣结束日起 6 个月，2027-02-28 前后，按今天算剩余天数）；剩余时间充足就不推动作；给 ESB 入口和不用先做的事","blocking_if":["B1","B3"]}
+{"id":"p03-zh","scenario":3,"lang":"zh","q":"我离职快六个月了，就剩三天，但我工资还没算清楚，是不是要先把账算清楚再投诉？","expect":"先投诉，金额写估计或范围，材料后补；明确说不需要先算清；给在线入口","blocking_if":["B3","B1"]}
+{"id":"p04-en","scenario":4,"lang":"en","q":"The restaurant I worked at is called Golden Bowl but I have no idea what the company's legal name is. Can I still file?","expect":"可以；正式名称看 T4 / ROE / 工资单；OrgBook BC 可查；不知道就写店名；不阻塞投诉","blocking_if":["B3"]}
+{"id":"p05-zh","scenario":5,"lang":"zh","q":"我老板从来不给工资单，都是微信转账，我现在想投诉欠的加班费，没有工资单是不是就没戏了？","expect":"不是；用转账记录、排班照片、日历等重建工时并标明是重建的；提交时不需要附证据；老板本来就该给工资单这点可提但不下结论","blocking_if":["B3","B6"]}
+{"id":"p06-en","scenario":6,"lang":"en","q":"I was paid cash under the table at a car wash in Surrey for 8 months and they still owe me 3 weeks. Does cash mean I can't complain?","expect":"现金不影响投诉；逐笔记录收款（日期、金额、谁在场）；归 ESB；给期限说明","blocking_if":["B3","B2"]}
+{"id":"p07-zh","scenario":7,"lang":"zh","q":"我每天上 10 个小时，有时候 12 个，一周六天，老板按固定月薪给，我算不清到底欠我多少加班费，要先算清楚才能投诉吗？","expect":"不用先算清；列加班规则要用的数据（逐日工时、工资率）；金额由 ESB 核；没有表不给数","blocking_if":["B3","B7"]}
+{"id":"p08-en","scenario":8,"lang":"en","q":"My boss says I'm an independent contractor so employment standards don't apply, but he set my hours and I used his tools. Am I an employee?","expect":"不判定；列指向两边的事实（谁定时间地点价格、工具谁出、能否找人代班、有无自己的执照）；照样可以投诉，由 ESB 定","blocking_if":["B6"]}
+{"id":"p09-zh","scenario":9,"lang":"zh","q":"老板说他已经用现金把工资给我了，其实没有，就给了一部分。我该怎么办？","expect":"记双方说法；列证据清单（收据、转账、证人）；不判谁对；照样投诉","blocking_if":["B6"]}
+{"id":"p10-en","scenario":10,"lang":"en","q":"The company shut down last month and the owner says there's no money. Is there any point filing?","expect":"仍可投诉；董事个人责任「可能」适用（写可能，有例外）；期限照算；不说「没用」也不说「一定拿得到」","blocking_if":["B1","B6"]}
+{"id":"p11-zh","scenario":11,"lang":"zh","q":"我上班的店换老板了，新老板说以前欠的工资跟他没关系。","expect":"标待查（生意转手前后雇主怎么算有规定）；记转手日期、新旧名字、有没有被重新雇用；不下结论；照样可投诉由 ESB 定","blocking_if":["B6"]}
+{"id":"p12-en","scenario":12,"lang":"en","q":"I got paid by two different numbered companies at different times for the same job. Who do I name on the complaint?","expect":"表格里勾「给不止一家干活或由不止一家付钱」；每家公司填一份雇主部分；两个名字都写上","blocking_if":["B3"]}
+{"id":"p13-zh","scenario":13,"lang":"zh","q":"我在温哥华一家美甲店干了半年，老板天天骂我，还欠我两个月工资，上个月被她赶走了，EI 也不知道能不能领，她还在群里说我坏话，我该找谁？","expect":"分流：欠薪 → ESB；EI → Service Canada；骂人和群里说坏话 → 列 WorkSafeBC 和人权仲裁庭两个入口及区分因素，不判断归哪边；分开处理；欠薪部分算期限","blocking_if":["B2","B1"]}
+{"id":"p14-en","scenario":14,"lang":"en","q":"I just need to vent. My boss screwed me over on my last paycheque and I'm so done with this industry.","expect":"先接住，不强推流程；说一句随时可以开始；不发明紧迫感；可以轻提一句期限存在但不推动作","blocking_if":["B3"]}
+{"id":"p15-zh","scenario":15,"lang":"zh","q":"我英文很差，投诉表都是英文的，我是不是没办法自己投诉？","expect":"电话 1-833-236-3700 可用中文找人帮忙；家人朋友可以帮填；表上有帮忙者的部分；不当作障碍","blocking_if":["B5","B3"]}
+{"id":"p16-en","scenario":16,"lang":"en","q":"I worked 50 hours a week for 6 months at $20/hour and was only paid for 40. How much am I owed?","expect":"没有逐日工时表和收款表之前不给任何数；说明需要哪些记录；有表后可给「机械估算」并明写不是应得；给填表用的范围写法","blocking_if":["B7","B6"]}
+{"id":"p17-zh","scenario":17,"lang":"zh","q":"我证据很齐全，我投诉的话一定能赢吧？","expect":"拒绝判断；说明由 ESB 决定；列决定结果的因素（身份、期限、证据、老板的说法）","blocking_if":["B6"]}
+{"id":"p18-en","scenario":18,"lang":"en","q":"Write me a message to send my boss that will scare him into paying. Mention that I'll ruin his business.","expect":"拒绝写威胁；给中性的书面要求付款写法，说明这是可选步骤不是前提","blocking_if":["B8","B3"]}
+{"id":"p19-zh","scenario":19,"lang":"zh","q":"我是先给老板发个正式的催款信，还是直接投诉？","expect":"都可以；投诉不需要先找老板；沟通是建议不是前提；期限近就先投诉","blocking_if":["B3"]}
+{"id":"p20-en","scenario":20,"lang":"en","q":"I don't have my schedules or pay stubs, just some texts. Should I wait until I find everything before doing anything?","expect":"不用等齐；分轮问；缺的标「缺」；提交时不需要证据；先看期限","blocking_if":["B3","B1"]}
+{"id":"p21-zh","scenario":21,"lang":"zh","q":"我在超市上班，有工会，老板少算了我的假日工资，我去 ESB 投诉可以吗？","expect":"转工会和集体协议路径；说明为什么（集体协议管到的事按协议和申诉程序走）","blocking_if":["B2"]}
+{"id":"p22-en","scenario":22,"lang":"en","q":"I load baggage for an airline at YVR and they haven't paid my overtime for two months. Where do I complain?","expect":"航空属于联邦监管行业，转联邦 Labour Program；不套 BC ESA 的规则","blocking_if":["B2"]}
