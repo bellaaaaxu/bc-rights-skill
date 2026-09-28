@@ -1,0 +1,53 @@
+name: Weekly check of official sources
+
+on:
+  schedule:
+    - cron: '0 16 * * 1' # Mondays 16:00 UTC (08:00 or 09:00 Pacific)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Get the canada-law script (statute text)
+        run: |
+          curl -sSL -o canada-law.tgz https://github.com/bellaaaaxu/canada-law/releases/download/v0.2.2/canada-law-0.2.2.tgz
+          mkdir canada-law && tar -xzf canada-law.tgz -C canada-law --strip-components=1
+          echo "CANADA_LAW_CLI=$PWD/canada-law/skills/canada-employment-law/scripts/bclaw.mjs" >> "$GITHUB_ENV"
+
+      - name: Check official sources
+        id: check
+        run: node scripts/check-sources.mjs
+        continue-on-error: true
+
+      # last_checked moved; last_human_verified never moves here.
+      - name: Record the run
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add skills/bc-unpaid-wages/references/sources.json
+          git diff --cached --quiet || git commit -m "Weekly source check: last_checked"
+          git push
+
+      - name: Open or update the review issue
+        if: steps.check.outcome != 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create needs-review --color d93f0b --description "An official source may have changed" 2>/dev/null || true
+          n=$(gh issue list --label needs-review --state open --json number --jq '.[0].number')
+          if [ -n "$n" ]; then
+            gh issue comment "$n" --body-file .local/check-report.md
+          else
+            gh issue create --title "Official source may have changed: $(date -u +%F)" --label needs-review --body-file .local/check-report.md
+          fi
+          exit 1
