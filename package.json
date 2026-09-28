@@ -12,7 +12,8 @@
     "check": "node scripts/check-sources.mjs",
     "accept": "node scripts/check-sources.mjs --accept",
     "validate": "node scripts/validate.mjs",
-    "eval": "node evals/run/run.mjs"
+    "eval": "node evals/run/run.mjs",
+    "eval:decision": "node evals/run/run-decision.mjs"
   },
   "license": "MIT"
 }
