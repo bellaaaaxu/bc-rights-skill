@@ -1,5 +1,6 @@
 // evals/run/run-codex.mjs: the same procedure / journey sets on OpenAI Codex CLI (second model).
-//   node evals/run/run-codex.mjs --set procedure|journey|journey-holdout [--arms bare,skill,fallback] [--only ids] [--dry-run] [--model <m>]
+//   node evals/run/run-codex.mjs --set procedure|journey|journey-holdout [--arms bare,skill,fallback] [--only ids] [--dry-run] [--model <m>] [--effort low|medium|high]
+// Model and reasoning effort default to ~/.codex/config.toml; whichever applies is written into mapping.json (the --json output does not say).
 // Codex reads skills from ~/.agents/skills, so arms are made by moving folders there (and restoring afterwards):
 //   bare      neither bc-unpaid-wages nor canada-employment-law visible
 //   skill     both visible
@@ -20,6 +21,7 @@ const set = opt('--set');
 const arms = (opt('--arms') ?? 'bare,skill').split(',');
 const only = opt('--only')?.split(',');
 const model = opt('--model');
+const effort = opt('--effort');
 const dry = args.includes('--dry-run');
 if (!set) { console.error('--set procedure|journey|journey-holdout'); process.exit(2); }
 for (const a of arms) if (!['bare', 'skill', 'fallback'].includes(a)) { console.error(`unknown arm ${a}`); process.exit(2); }
@@ -27,6 +29,11 @@ for (const a of arms) if (!['bare', 'skill', 'fallback'].includes(a)) { console.
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const cases = readFileSync(join(root, 'evals', set, 'cases.jsonl'), 'utf8').trim().split('\n').map(JSON.parse).filter((c) => !only || only.includes(c.id));
 const codex = process.env.CODEX_BIN ?? (process.platform === 'win32' ? join(process.env.APPDATA ?? join(homedir(), 'AppData', 'Roaming'), 'npm', 'codex.cmd') : 'codex');
+// Defaults from Codex's own config, so mapping.json records what actually ran.
+const codexConfig = (() => { try { return readFileSync(join(homedir(), '.codex', 'config.toml'), 'utf8'); } catch { return ''; } })();
+const cfgVal = (k) => codexConfig.match(new RegExp('^' + k + '\s*=\s*"([^"]*)"', 'm'))?.[1] ?? null;
+const modelUsed = model ?? cfgVal('model');
+const effortUsed = effort ?? cfgVal('model_reasoning_effort');
 const stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + '-codex';
 const out = join(root, '.local', 'eval-runs', stamp);
 const agentsSkills = join(homedir(), '.agents', 'skills');
@@ -47,7 +54,7 @@ function hide(paths) {
 function restore(moved) { for (const p of moved) if (existsSync(parking(p))) renameSync(parking(p), p); }
 
 // The prompt goes in on stdin ("-"), so no user text has to survive cmd.exe quoting.
-const argv = (lastFile, cwd) => ['exec', '--skip-git-repo-check', '--ephemeral', '-s', 'read-only', '--json', '-o', lastFile, '-C', cwd, ...(model ? ['-m', model] : []), '-'];
+const argv = (lastFile, cwd) => ['exec', '--skip-git-repo-check', '--ephemeral', '-s', 'read-only', '--json', '-o', lastFile, '-C', cwd, ...(model ? ['-m', model] : []), ...(effort ? ['-c', `model_reasoning_effort=${effort}`] : []), '-'];
 const quote = (s) => `"${String(s).replace(/"/g, '\\"')}"`;
 
 function summarise(jsonl, last) {
@@ -91,10 +98,10 @@ for (const arm of arms) {
       const key = randomBytes(4).toString('hex');
       writeFileSync(join(out, 'blind', `${key}.md`), `# ${key}\n\n**Question:** ${c.q}\n\n---\n\n${s.answer}\n`);
       const auto = autoChecks(s.answer, { allowedUrlPrefixes, fallback: arm === 'fallback' });
-      mapping.push({ key, case: c.id, set, arm, engine: 'codex', ...s, answer: undefined, auto });
+      mapping.push({ key, case: c.id, set, arm, engine: 'codex', ...s, model: modelUsed, effort: effortUsed, answer: undefined, auto });
       writeFileSync(join(out, 'mapping.json'), JSON.stringify(mapping, null, 2)); // after every answer
       // The blind key is deliberately not printed: the grader must not see which key belongs to which arm.
-      console.log(`${c.id} ${arm}: tokens=${s.tokens ?? '?'} skill=${s.skill_used ? 'Y' : 'n'} law=${s.law_fetched ? 'Y' : 'n'} web=${s.web_used ? 'Y' : 'n'} auto=${auto.join(',') || '-'}`);
+      console.log(`${c.id} ${arm} [${modelUsed} ${effortUsed}]: tokens=${s.tokens ?? '?'} skill=${s.skill_used ? 'Y' : 'n'} law=${s.law_fetched ? 'Y' : 'n'} web=${s.web_used ? 'Y' : 'n'} auto=${auto.join(',') || '-'}`);
     }
   } finally {
     restore(moved);
