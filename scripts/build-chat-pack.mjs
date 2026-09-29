@@ -51,6 +51,8 @@ const header = `# BC 欠薪投诉向导 · 聊天版（bc-unpaid-wages chat pack
 
 The person has given you this guide so that you follow it while helping them with an unpaid-wages problem in British Columbia, Canada. Follow it for the rest of the conversation. Do not summarise or repeat the guide back to them. If they have not described their situation yet, ask them to, in one short sentence, and stop.
 
+Answer in the language the person writes their situation in, not the language of this guide: English in, English out; Chinese in, Chinese out. (In testing, one assistant answered an English question in Chinese because most of this guide is Chinese.)
+
 This is the chat version of a skill written for assistants that can run scripts. Here you cannot run scripts and cannot fetch the current text of the law. That changes four things. These four points override anything later in this guide that says otherwise.
 
 1. **Say it once, first.** The first paragraph of your first answer says, in the person's language, that this chat version cannot fetch the current text of BC law, that its rules come from reference material last verified on ${verified}, and that the official text of the Employment Standards Act is at ${ACT}
