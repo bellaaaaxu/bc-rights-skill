@@ -4,8 +4,9 @@
 //   bare      empty project, web tools on: an ordinary AI that can browse
 //   skill     project holds bc-unpaid-wages + canada-employment-law (script tier), web tools on
 //   fallback  project holds bc-unpaid-wages only, and ~/.claude/skills/canada-employment-law is moved away during the run
-//   chat      no tools at all; the prompt is the chat pack (dist/bc-unpaid-wages-chat.md) followed by the question, as a
-//             person would paste it into a chat app. Build the pack first: node scripts/build-chat-pack.mjs
+//   chat      no tools at all; the prompt is the quick chat pack (dist/bc-unpaid-wages-chat.md) followed by the question,
+//             as a person would paste it into a chat app. Build the packs first: node scripts/build-chat-pack.mjs
+//   chatfull  the same with the full chat pack (dist/bc-unpaid-wages-chat-full.md)
 //   plain     no tools, no pack: an ordinary chat app answering from memory (the comparison for "chat")
 // Output: .local/eval-runs/<time>/runs/<case>-<arm>.jsonl, blind/<random>.md (answer only), mapping.json
 // Spends the tester's own Claude usage; one process at a time (parallel `claude` processes collided on ~/.claude.json).
@@ -27,7 +28,7 @@ const model = opt('--model');
 const dry = args.includes('--dry-run');
 const outOpt = opt('--out'); // append into an existing run folder (chunked runs share one mapping.json)
 if (!set) { console.error('--set procedure|journey|journey-holdout'); process.exit(2); }
-for (const a of arms) if (!['bare', 'skill', 'fallback', 'chat', 'chatshort', 'plain'].includes(a)) { console.error(`unknown arm ${a}`); process.exit(2); }
+for (const a of arms) if (!['bare', 'skill', 'fallback', 'chat', 'chatfull', 'plain'].includes(a)) { console.error(`unknown arm ${a}`); process.exit(2); }
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const cases = readFileSync(join(root, 'evals', set, 'cases.jsonl'), 'utf8').trim().split('\n').map(JSON.parse).filter((c) => !only || only.includes(c.id));
@@ -72,13 +73,16 @@ const chatArgv = () => [
   '--no-session-persistence', '--max-budget-usd', '2', '--output-format', 'stream-json', '--verbose',
   ...(model ? ['--model', model] : []),
 ];
-const packPath = join(root, 'dist', 'bc-unpaid-wages-chat.md');
-const pack = existsSync(packPath) ? readFileSync(packPath, 'utf8') : null;
-if (arms.includes('chat') && !pack) { console.error('chat arm needs dist/bc-unpaid-wages-chat.md: run node scripts/build-chat-pack.mjs'); process.exit(2); }
-const shortPath = join(root, 'dist', 'bc-unpaid-wages-chat-short.md');
-const shortPack = existsSync(shortPath) ? readFileSync(shortPath, 'utf8') : null;
-if (arms.includes('chatshort') && !shortPack) { console.error('chatshort arm needs dist/bc-unpaid-wages-chat-short.md: run node scripts/build-chat-pack.mjs --short'); process.exit(2); }
-const chatInput = (arm, q) => (arm === 'chat' ? `${pack}\n\n---\n\n我的情况 / My situation:\n\n${q}` : arm === 'chatshort' ? `${shortPack}\n\n---\n\n我的情况 / My situation:\n\n${q}` : q);
+// chat = the quick pack (default download), chatfull = the full pack. Build both: node scripts/build-chat-pack.mjs
+const PACKS = { chat: 'bc-unpaid-wages-chat.md', chatfull: 'bc-unpaid-wages-chat-full.md' };
+const packs = {};
+for (const [arm, file] of Object.entries(PACKS)) {
+  if (!arms.includes(arm)) continue;
+  const p = join(root, 'dist', file);
+  if (!existsSync(p)) { console.error(`${arm} arm needs dist/${file}: run node scripts/build-chat-pack.mjs`); process.exit(2); }
+  packs[arm] = readFileSync(p, 'utf8');
+}
+const chatInput = (arm, q) => (packs[arm] ? `${packs[arm]}\n\n---\n\n我的情况 / My situation:\n\n${q}` : q);
 
 function summarise(jsonl) {
   const ev = jsonl.split('\n').flatMap((l) => { try { return [JSON.parse(l)]; } catch { return []; } });
@@ -110,7 +114,7 @@ for (const arm of arms) {
       if (dry) { console.log(`${c.id} ${arm}: claude ${argv(c.q).map((a) => JSON.stringify(a)).join(' ')}`); continue; }
       mkdirSync(join(out, 'runs'), { recursive: true });
       mkdirSync(join(out, 'blind'), { recursive: true });
-      const noTools = arm === 'chat' || arm === 'chatshort' || arm === 'plain';
+      const noTools = arm === 'chat' || arm === 'chatfull' || arm === 'plain';
       const r = noTools
         ? spawnSync(claude, chatArgv(), { cwd, input: chatInput(arm, c.q), encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 10 * 60 * 1000 })
         : spawnSync(claude, argv(c.q), { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 10 * 60 * 1000, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -119,7 +123,7 @@ for (const arm of arms) {
       const s = summarise(jsonl);
       const key = randomBytes(4).toString('hex');
       writeFileSync(join(out, 'blind', `${key}.md`), `# ${key}\n\n**Question:** ${c.q}\n\n---\n\n${s.answer}\n`);
-      const auto = autoChecks(s.answer, { allowedUrlPrefixes, fallback: arm === 'fallback', chat: arm === 'chat' || arm === 'chatshort' });
+      const auto = autoChecks(s.answer, { allowedUrlPrefixes, fallback: arm === 'fallback', chat: arm === 'chat' || arm === 'chatfull' });
       mapping.push({ key, case: c.id, set, arm, ...s, answer: undefined, auto });
       writeFileSync(mappingPath, JSON.stringify(mapping, null, 2)); // after every answer, so a killed run loses nothing
       total += s.cost_usd ?? 0;
@@ -132,6 +136,7 @@ for (const arm of arms) {
   }
 }
 if (!dry) {
-  writeFileSync(join(out, 'scores.csv'), 'key,B1,B2,B3,B4,B5,B6,B7,B8,F1,F2,N1,N2,N3,journey1,journey2,journey3,journey4,journey5,journey6,category,notes\n' + mapping.map((m) => m.key).sort().map((k) => `${k},,,,,,,,,,,,,,,,,,,,,\n`).join(''));
+  const COLS = 'key,B1,B2,B3,B4,B5,B6,B7,B8,B9,F1,F2,N1,N2,N3,L1,L2,journey1,journey2,journey3,journey4,journey5,journey6,category,notes';
+  writeFileSync(join(out, 'scores.csv'), COLS + '\n' + mapping.map((m) => m.key).sort().map((k) => k + ','.repeat(COLS.split(',').length - 1) + '\n').join(''));
   console.log(`\n${out}\nTotal $${total.toFixed(2)}. Grade blind/ first (fill scores.csv, rubric.md), then open mapping.json.`);
 }

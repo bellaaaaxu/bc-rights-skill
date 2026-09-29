@@ -125,6 +125,7 @@ for (const arm of arms) {
 }
 if (!dry) {
   writeFileSync(join(out, 'mapping.json'), JSON.stringify(mapping, null, 2));
-  writeFileSync(join(out, 'scores.csv'), 'key,B1,B2,B3,B4,B5,B6,B7,B8,F1,F2,N1,N2,N3,journey1,journey2,journey3,journey4,journey5,journey6,category,notes\n' + mapping.map((m) => m.key).sort().map((k) => `${k},,,,,,,,,,,,,,,,,,,,,\n`).join(''));
+  const COLS = 'key,B1,B2,B3,B4,B5,B6,B7,B8,B9,F1,F2,N1,N2,N3,L1,L2,journey1,journey2,journey3,journey4,journey5,journey6,category,notes';
+  writeFileSync(join(out, 'scores.csv'), COLS + '\n' + mapping.map((m) => m.key).sort().map((k) => k + ','.repeat(COLS.split(',').length - 1) + '\n').join(''));
   console.log(`\n${out}\nGrade blind/ first (fill scores.csv, rubric.md), then open mapping.json.`);
 }

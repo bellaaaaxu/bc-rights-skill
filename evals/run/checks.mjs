@@ -5,6 +5,17 @@ const PHONES_OK = new Set(['1-833-236-3700']);
 // Domains canada-law returns, plus its own install address: always allowed.
 const ALWAYS_OK = ['https://www.bclaws.gov.bc.ca/', 'https://laws-lois.justice.gc.ca/', 'https://github.com/bellaaaaxu/canada-law'];
 
+// Length of a reply for rubric L1: Chinese characters and English words, not counting URLs or the closing lines
+// (verified date / not legal advice / the "reply more" offer). Target: 400 Chinese characters or 150 English words.
+const CLOSING = /核对的参考资料|核对于 ?20\d\d|verified 20\d\d|not legal advice|不是法律意见|回复「详细」|回复『详细』|回复“详细”|Reply ['"‘“]?more|King's Printer/i;
+export function replyLength(answer) {
+  const body = String(answer).split('\n').filter((l) => !CLOSING.test(l)).join('\n').replace(/https?:\/\/\S+/g, ' ');
+  const cjk = (body.match(/[㐀-鿿]/g) || []).length;
+  const words = (body.replace(/[㐀-鿿]/g, ' ').match(/[A-Za-z][A-Za-z'’-]*/g) || []).length;
+  const chinese = cjk >= words;
+  return { cjk, words, over: chinese ? cjk > 400 : words > 150 };
+}
+
 export function autoChecks(answer, opts = {}) {
   const a = String(answer);
   const flags = new Set();
@@ -55,8 +66,8 @@ export function autoChecks(answer, opts = {}) {
 
   // Fallback mode requirements
   if (opts.fallback) {
-    if (!/canada-law-\d+\.\d+\.\d+\.tgz install/.test(a)) flags.add('F1');
-    if (!/未现取|未实时获取|未取到|未取得|未获取|未能获取|未联网|没查到|没有查到|查不到|not fetched|not been fetched|could not fetch|unable to fetch|can't (fetch|pull)|cannot (fetch|pull)/i.test(a)) flags.add('F2');
+    if (!/canada-law-\d+\.\d+\.\d+\.tgz install|连不上 ?BC ?Laws|无法连接 ?BC ?Laws|can(?:no|')t reach BC Laws|could not reach BC Laws|couldn't reach BC Laws/i.test(a)) flags.add('F1');
+    if (!/未现取|未取现行|未实时获取|未取到|未取得|未获取|未能获取|未联网|没查到|没有查到|查不到|not fetched|not been fetched|could not fetch|unable to fetch|can't (fetch|pull)|cannot (fetch|pull)/i.test(a)) flags.add('F2');
   }
   return [...flags].sort();
 }

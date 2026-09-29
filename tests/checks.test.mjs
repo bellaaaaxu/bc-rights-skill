@@ -64,3 +64,16 @@ test('chat pack: a legal rule without the not-fetched tag is flagged F2; with it
 test('quick chat pack: the one-line footer tag counts as the not-fetched tag', () => {
   assert.deepEqual(autoChecks('规则来自 2026-09-28 核对的参考资料，未取现行法条原文。', { chat: true }), []);
 });
+
+test('replyLength counts Chinese characters and English words, not URLs or the closing lines', async () => {
+  const { replyLength } = await import('../evals/run/checks.mjs');
+  const zh = '截止日是明年二月。https://example.org/very/long/path\n规则来自 2026-09-28 核对的参考资料，未取现行法条原文。';
+  assert.equal(replyLength(zh).cjk, 8);
+  assert.equal(replyLength('File by March 3.\nReply "more" for the full explanation.').words, 3);
+  assert.equal(replyLength('字'.repeat(401)).over, true);
+});
+
+test('fallback F1: "cannot reach BC Laws" counts when canada-law is installed but offline', () => {
+  const a = '这个环境连不上 BC Laws，规则来自 2026-09-28 核对的参考资料，未取现行法条原文。';
+  assert.deepEqual(autoChecks(a, { fallback: true }), []);
+});
