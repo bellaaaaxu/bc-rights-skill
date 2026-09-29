@@ -13,7 +13,7 @@
         "05-form"
       ],
       "baseline": "ee72b17651486b3f4bfd3502a8683a567d41b02033a769dd15e22a56f140be98",
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -34,7 +34,7 @@
         "05-form"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -54,7 +54,7 @@
         "07-traps"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -74,7 +74,7 @@
         "07-traps"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -91,7 +91,7 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -105,7 +105,7 @@
         "05-form"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -122,7 +122,7 @@
         "05-form"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -138,7 +138,7 @@
         "05-form"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -155,7 +155,7 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -168,7 +168,7 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -182,7 +182,7 @@
         "02-first-action"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -195,7 +195,7 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -208,7 +208,7 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -221,7 +221,7 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -237,7 +237,7 @@
         "02-first-action"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -254,7 +254,7 @@
         "02-first-action"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -268,7 +268,7 @@
         "07-traps"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -281,22 +281,26 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
     {
-      "id": "bc-news-sick-leave",
-      "what": "BC government news release (2021PREM0073-002235): 5 paid sick days from 2022-01-01",
-      "url": "https://news.gov.bc.ca/releases/2021PREM0073-002235",
-      "type": "reachable",
+      "id": "esb-igm-sick-leave",
+      "what": "ESB interpretation guideline for ESA s.49.1 (paid sick leave): 7 days between 2022-01-01 and 2022-03-31, 5 days a year from 2022-03-31",
+      "url": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/forms-resources/igm/esa-part-6-section-49-1",
+      "type": "phrases",
+      "phrases": [
+        "between January 1, 2022 and March 31, 2022",
+        "5 paid days from March 31, 2022"
+      ],
       "used_in": [
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
-      "status": "error"
+      "status": "ok"
     },
     {
       "id": "laws-esa",
@@ -479,7 +483,7 @@
         "96113_01:96": "32ce523a3c471ef0dd82ed9a1ec14b81b6d1edf337c69e24dc22254c33298c84",
         "96113_01:97": "82e14e3f09fa8807c3e8850aeab538c4502737329b3732472a95ecdd693f0b92"
       },
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -526,7 +530,7 @@
         "396_95:36": "7eda8649769de52651de4a481854f0055e8f11261b5928a066e4710d4f5cb44e",
         "396_95:45.031": "471eb6a428ac4dd95ebb5ec74003592bda2dc54fcc3ffad971b35b0f93be7c0f"
       },
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     },
@@ -562,7 +566,7 @@
         "18045:33": "cbee074ff2f0a77bb9ddf7ee1325b285047a7a9208a7db3ed866f2ce26b693d4",
         "E-5.6:29": "67ba04209a556cb9122a33c6e90ce764df43d9a54983251dcede6ba517933a3e"
       },
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-09-28",
       "last_human_verified": "2026-09-28",
       "status": "ok"
     }

@@ -32,6 +32,10 @@ First release. One skill, `bc-unpaid-wages`: unpaid wages, overtime, statutory h
 - `03-intake.md`: the employer's record-keeping duty (ESA s.27, s.28). `04-package.md`: vacation pay on every item of back pay.
 - Evaluation runner: keep the story's own "today" line (the host injects the real date); judge tool use from command items; move Codex's memory folder aside during runs.
 
+### Changed at release
+
+- The source for "paid sick leave started on 2022-01-01" was a BC government news release. The first hosted run of the weekly check could not fetch that page from a GitHub runner (it loads normally from a home connection), which marked the source as not checked and would have made the skill warn users about a possible change. The fact now cites the ESB interpretation guideline for s.49.1 instead, which also states the rule more precisely (7 days between 2022-01-01 and 2022-03-31, 5 days a year from 2022-03-31); `01-routing-deadlines.md` says so.
+
 ### Known limitations
 
 - Secondary rules are often missing from the facts package even though the reference files contain them.

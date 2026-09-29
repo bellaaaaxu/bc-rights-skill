@@ -1,7 +1,7 @@
 # 01 · 归不归 ESB，期限在哪
 
 给帮手看：第 1 阶段读这份。先判断这件事归不归 BC 就业标准处（Employment Standards Branch，下称 ESB），再算出截止日。
-来源 id：esb-form-pdf、esb-process、esb-screen-1、worksafebc-bullying、worksafebc-injury、bchrt、service-canada-ei、cra-taxes、labour-program、min-wage、esb-igm-updates、bc-news-sick-leave、laws-esa、laws-esr、laws-other（网址在 sources.json）。
+来源 id：esb-form-pdf、esb-process、esb-screen-1、worksafebc-bullying、worksafebc-injury、bchrt、service-canada-ei、cra-taxes、labour-program、min-wage、esb-igm-updates、esb-igm-sick-leave、laws-esa、laws-esr、laws-other（网址在 sources.json）。
 这是一般信息，不是法律意见。能不能拿回钱、拿回多少，由 ESB 决定。条文号是核过的起点，引用前用 canada-law 取现行原文。
 
 ## 归 ESB 的
@@ -46,5 +46,5 @@
 
 - **最低工资**每年 6 月 1 日调整；官网页面列了历年的数字（ https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/wages/minimum-wage ）。[来源: min-wage]
 - **9 月 30 日**（National Day for Truth and Reconciliation）2023 年起才是 BC 法定假日。现行的假日清单在 ESA s.1 的 statutory holiday 定义里 [来源: laws-esa]；加进去的是 2023 年的修正法案（Bill 2, SBC 2023 c.4）。
-- **带薪病假**：每年 5 天是 2022 年 1 月 1 日起才有的 [来源: bc-news-sick-leave]；2021-05-20 到 2021-12-31 另有新冠相关的临时带薪病假。更早的要查当时的规定。（现行条文 ESA s.49.1 [来源: laws-esa]、ESR s.45.031 [来源: laws-esr]）
+- **带薪病假**：2022 年 1 月 1 日起才有（2022 年 1 月 1 日到 3 月 31 日按当时的规定是 7 天，之后每年 5 天） [来源: esb-igm-sick-leave]；2021-05-20 到 2021-12-31 另有新冠相关的临时带薪病假。更早的要查当时的规定。（现行条文 ESA s.49.1 [来源: laws-esa]、ESR s.45.031 [来源: laws-esr]）
 - **其他条文**：ESB 有按生效日期排的修订清单，从 2021-05-19 记起（ https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/forms-resources/igm/updates ）。[来源: esb-igm-updates] **清单里没列，不等于那时和现在一样。**金额和期限要靠的条文，找不到当时的版本就写「未核实当时版本」。
