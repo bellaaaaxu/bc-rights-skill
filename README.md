@@ -60,12 +60,13 @@ Full counts, method and caveats: [`evals/results/`](evals/results/). Small sampl
 | Short replies, regression on 32 earlier questions × skill and chat pack | 0 of 64; median first-reply length down from 500–770 to about 280 (skill) and 210 (chat pack) Chinese characters or English words |
 | Chat pack, Claude with no tools, 40 questions | 0 of 40 with the pack; 23 of 40 without |
 | Chat pack, GPT model (via Codex), 10 questions | 0 of 10 |
+| Quick chat pack in the DeepSeek web app, 5 questions | 0 of 5 |
 | v0.1 frozen sets (Claude Opus 5.5 with the skill) | 22 scenarios 2 of 22; 10 messy stories 0 of 10; 8 published decisions 2 of 8 (both on the rules of an earlier year) |
 | Simulated source change | With the complaint-process page and s.74 marked changed: the chat pack stopped stating the deadline and sent the person to the official page or phone line; the skill with canada-law fetched the current s.74 before stating it |
 
 **Known issues**: about half of English first replies are over the 150-word target; the first question often asks two things ("Are you still working there? If not, what was your last day?"); in the no-thinking test setup a few replies began with the model's own drafting notes (1 in 8 after the fix).
 
-**Not tested**: real DeepSeek, Doubao or ChatGPT web apps; any real worker or real complaint. The grader was the same assistant that wrote the skill.
+**Not tested**: the Doubao and ChatGPT web apps; any real worker or real complaint. The grader was the same assistant that wrote the skill.
 
 ## Cost
 
