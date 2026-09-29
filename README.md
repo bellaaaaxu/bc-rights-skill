@@ -2,92 +2,83 @@
 
 [中文说明](README.zh.md)
 
-Skills that let an AI assistant walk a person through an official procedure in British Columbia, step by step, from the current official sources.
+An official procedure in British Columbia, turned into a guide an AI assistant can walk a person through: who to contact, the deadline, the first step, what you do **not** have to do first, how to read the form, and how to put the facts together. It works from the current official sources.
 
-**v0.1 has one skill: `bc-unpaid-wages`.** It helps a worker in BC, or someone helping them, take an unpaid wages, overtime, statutory holiday pay or vacation pay problem to the Employment Standards Branch (ESB): who to contact, the deadline, the first step, what you do **not** have to do first, how to read the complaint form, and how to put the facts together into a package the ESB can use. It answers in Chinese or English, and quotes the statute in English.
-
-It follows the [Agent Skills](https://agentskills.io) standard, so it works in Claude Code, Claude Desktop (via Claude Code), OpenAI Codex, and other assistants that read skills.
+**One procedure so far: `bc-unpaid-wages`.** It helps a worker in BC, or someone helping them, take an unpaid wages, overtime, statutory holiday pay or vacation pay problem to the Employment Standards Branch (ESB). Chinese or English.
 
 > **Please read first**
 > - This is general information about a public procedure. **It is not legal advice**, and it never decides anyone's case. The ESB decides complaints.
-> - The skill is told to give the deadline, the route and the first step, and to refuse three things: predicting whether you will win, telling you what to settle for, and writing threats. It is told not to give a dollar figure before an hours table and a payment table exist.
-> - **There is no evidence that using this skill improves the outcome of a real complaint.** What has been tested is described below, and it was tested by the people who wrote it.
-> - Whether the assistant fetches live statute text depends on the app you use and on whether the companion `canada-law` skill is installed. Without it the skill says so in its first paragraph and answers from dated reference files.
+> - **Replies are short by default**: the deadline, the next step, what is not needed first, and at most three questions. Reply "more" for the full explanation.
+> - **It says when it does not know.** It does not make up dates, figures or links; when an official source has recently changed, it says so and points to the ESB phone line.
+> - It refuses to predict whether you will win, to suggest what to settle for, and to write threats. No dollar figure before an hours table and a payment table exist.
+> - **There is no evidence that using it improves the outcome of a real complaint.** What has been tested is below, and it was tested by the people who wrote it.
 
-## What was tested, and what was not
+## Three ways to use it
 
-Full counts, method and caveats: [`evals/results/2026-09-28.md`](evals/results/2026-09-28.md). Test sets and the grading rubric: [`evals/`](evals/). Everything below is a raw count from a small sample.
+**1. Any AI chat app (simplest, nothing to install)**
 
-**Three test layers**, all offline, all graded against a written rubric of eight *blocking* errors (wrong deadline, wrong agency, invented prerequisites, confidentiality overclaim, wrong phone or URL, deciding the case, stating a figure as what is owed, writing threats):
+Download the chat pack and attach it to (or paste it into) a new chat in ChatGPT, DeepSeek, Claude, Doubao and the like, then describe your situation:
 
-| Layer | What it is | Result with the skill (Claude Opus 5.5) | Same model, no skill |
-|---|---|---|---|
-| Procedure set | 22 fixed scenarios, Chinese and English | 2 of 22 answers had a blocking error (one mistyped URL; one figure computed from numbers in the question) | 10 of 22 |
-| Journey set | 10 messy, emotional narratives | 0 of 10; all six required behaviours in all 10 | 7 of 10 |
-| Hold-out sets (new questions after the skill was changed) | 5 + 3 narratives | 0 of 8 | 7 of 8 |
-| Decision set | 8 published BC Employment Standards Tribunal decisions, replayed as a conversation with a scripted "worker" who only knows the facts | 2 of 8 packages had a deadline error, both in how a rule from an earlier year was applied; 0 for the other seven error types. Secondary rules (overtime thresholds, holiday eligibility, vacation pay on back pay) were missed in every package | not run |
+- Quick version (default, about 8,400 tokens): <https://github.com/bellaaaaxu/bc-rights-skill/raw/main/chat/bc-unpaid-wages-chat.txt>
+- Full version (for organising your facts and reading the form, about 16,800 tokens): <https://github.com/bellaaaaxu/bc-rights-skill/raw/main/chat/bc-unpaid-wages-chat-full.txt>
 
-A second model, OpenAI Codex, was run on a 10-question sample: 0 of 10 answers with the skill had a blocking error; 6 of 10 without it (Codex browses the web by default, so its "no skill" arm is not comparable to Claude's). Half of the Codex runs read Codex's own memory file, so that environment was not clean; the runner now moves that folder aside.
+Both files are rebuilt every week. The chat version cannot fetch current statute text; its rules come from reference files checked automatically every week, and every reply ends with the check date.
 
-**Not tested**: a full Codex run; any DeepSeek run; any real worker or any real complaint. The grader for the first three layers was the same assistant that wrote the skill (grading was blind to which arm produced an answer). "Verified by a person" in the source list means an AI assistant read the official page or statute section in the session, not a lawyer.
+**2. claude.ai or the Claude desktop app**
 
-## Install
+Download `bc-unpaid-wages.zip` and `canada-employment-law.zip` from the [release page](https://github.com/bellaaaaxu/bc-rights-skill/releases) and upload both under **Customize → Skills → + → Upload a skill** ("Code execution and file creation" must be on). Tested 2026-09-29: the skill triggers. The claude.ai sandbox may not reach BC Laws; when it cannot, the answer says so and works from the reference files.
 
-You need [Node.js](https://nodejs.org) 20 or newer.
+**3. Claude Code, Codex and other assistants that run scripts**
 
-**1. Install `canada-law`** (current official text of BC and federal employment statutes; the skill fetches every section it quotes through it):
+You need [Node.js](https://nodejs.org) 20 or newer. Install `canada-law` (current statute text) first, then this skill:
 
 ```bash
-npx https://github.com/bellaaaaxu/canada-law/releases/download/v0.2.2/canada-law-0.2.2.tgz install
+npx https://github.com/bellaaaaxu/canada-law/releases/download/v0.2.3/canada-law-0.2.3.tgz install
 ```
-
-**2. Install this skill.** With the [skills CLI](https://github.com/vercel-labs/skills):
 
 ```bash
 npx skills add bellaaaaxu/bc-rights-skill
 ```
 
-Or copy the folder by hand into the skills directory of your assistant, for example `~/.claude/skills/bc-unpaid-wages` (Claude Code) or `~/.agents/skills/bc-unpaid-wages` (Codex):
+Or copy `skills/bc-unpaid-wages` into your assistant's skills folder, for example `~/.claude/skills/` (Claude Code) or `~/.agents/skills/` (Codex).
 
-```bash
-git clone https://github.com/bellaaaaxu/bc-rights-skill
-cp -r bc-rights-skill/skills/bc-unpaid-wages ~/.claude/skills/
-```
+## Maintained automatically, no human review
 
-**3. Ask.** For example: "我在温哥华一家餐馆打工，老板欠我两个月工资，我已经离职一个月了，该怎么办？" or "My boss hasn't paid my last three weeks and I was told not to come back. Where do I start?" The skill triggers on complaint-type questions about unpaid wages in BC; a bare "what does section 74 say" goes to `canada-law` instead.
+- **Every week** a GitHub Action re-checks all 22 official sources: key sentences still on the ESB pages, the complaint form PDF unchanged, the 41 statute sections the reference files rely on unchanged.
+- **When a source changes, only what rests on it stops.** Every sentence in the reference files is tagged with its source; the changed part is no longer stated, and the answer says the official source may have just changed and gives the official link or 1-833-236-3700. Statutes are handled section by section, so one amended section does not silence the whole Act.
+- **Installed copies follow along**: when online, the skill reads the latest check results from GitHub before answering, so nobody has to reinstall. That is one request for a public file, with no personal information.
+- **Safety net**: if the automated check has not run for more than 180 days (the weekly job stopped, or an offline copy is old), the skill stops stating any legal rule and gives only official links and the phone line. 180 days is this project's own threshold, not a legal rule.
+- The reference files were first written by an AI assistant reading the official pages and statute sections in the session, not by a lawyer.
 
-## How an answer is built
+## What was tested, and what was not
 
-1. **Status first.** The skill runs its own `scripts/status.mjs`, which reads `references/sources.json`: 22 official sources, each with the date it was last checked by automation and the date a person last read it. If a statute source has changed since it was read, or no one has read the sources for 180 days, the skill enters **fail-closed mode**: it gives links and the ESB phone number but states no rule as a fact. (180 days is this project's own threshold, not a legal one.)
-2. **Live statute text.** Every section it quotes is fetched through `canada-law` at answer time. Without `canada-law`, the first paragraph says so and gives the install command, and every rule sentence is tagged as coming from reference files last verified on a stated date.
-3. **Reference files** (Chinese, in `references/`): routing and deadlines, the first action, an intake question list, a facts-package template, how to read the six parts of the official form, what employers commonly say, common traps. Every statement carries a source id; official URLs are copied from the files, never typed from memory.
-4. **Fourteen rules** in `SKILL.md`, each added because a test failed without it: deadline stated conditionally until the end date is confirmed; no invented prerequisites; no conclusions; no threats; six single questions per round; no figure before tables; events in an earlier year are checked against the rules of that year.
+Full counts, method and caveats: [`evals/results/`](evals/results/). Small samples, raw counts. The rubric has nine *blocking* errors (wrong deadline, wrong agency, invented prerequisites, confidentiality overclaim, wrong phone or URL, deciding the case, stating a figure as what is owed, writing threats, stating an unchecked date or figure as checked).
 
-The footer of every answer shows the two dates: when the statute text was current, and when a person last verified the reference files.
+| Test | Result |
+|---|---|
+| Short replies (v0.2), 5 new questions × 3 ways of use | 0 of 15 with a blocking error |
+| Short replies, regression on 32 earlier questions × skill and chat pack | 0 of 64; median first-reply length down from 500–770 to about 280 (skill) and 210 (chat pack) Chinese characters or English words |
+| Chat pack, Claude with no tools, 40 questions | 0 of 40 with the pack; 23 of 40 without |
+| Chat pack, GPT model (via Codex), 10 questions | 0 of 10 |
+| v0.1 frozen sets (Claude Opus 5.5 with the skill) | 22 scenarios 2 of 22; 10 messy stories 0 of 10; 8 published decisions 2 of 8 (both on the rules of an earlier year) |
+| Simulated source change | With the complaint-process page and s.74 marked changed: the chat pack stopped stating the deadline and sent the person to the official page or phone line; the skill with canada-law fetched the current s.74 before stating it |
 
-### Example
+**Known issues**: about half of English first replies are over the 150-word target; the first question often asks two things ("Are you still working there? If not, what was your last day?"); in the no-thinking test setup a few replies began with the model's own drafting notes (1 in 8 after the fix).
 
-From the hold-out set (Claude Opus 5.5 with the skill, 28 September 2026), shortened; the full text is in `docs/acceptance/2026-09-28-M4-跑分.md`.
-
-> **Q:** Back in 2022 I worked at a Burnaby warehouse from May to December, hourly, and they never paid stat holiday pay for any holiday that year, including Sept 30 which everyone told me was a holiday. I left in Dec 2022. I only found out about the Employment Standards Branch now. What was I actually owed for those holidays and is it too late?
->
-> Short answer: the complaint deadline passed in 2023. The law does let the Branch accept a late complaint, but only under a strict test, and September 30, 2022 was probably not a BC stat holiday.
->
-> **1. Is it too late?** The Act says (s.74): "(3) A complaint relating to an employee whose employment has terminated must be delivered … within 6 months after the last day of employment." "(5) On application, the director may extend the time … including making an extension after the time to deliver has expired, if the director is satisfied that (a) special circumstances exist or existed … and (b) an injustice would otherwise result." … Your only route to the Branch now is to **ask for an extension**. The Branch decides whether your reasons meet that test. I can't predict the result.
->
-> **3. September 30, 2022.** According to the reference files, the National Day for Truth and Reconciliation became a BC stat holiday in 2023 … Treat this as "to be confirmed under the rules of the time."
->
-> *This part was not checked against an official source:* the 2022 BC stat holidays falling while you worked there were probably … Also, s.44 to s.46 above are today's text. I haven't confirmed they read exactly the same in 2022.
->
-> To help with the extension request and a holiday-by-holiday table, I need to know: 1. What was your exact last day of work? 2. What was your exact first day? 3. Were you in a union? 4. Did you work on any of those holidays? 5. Do you still have your pay stubs or bank deposit records? 6. What, if anything, stopped you from filing in the first half of 2023?
-
-## Freshness
-
-`references/sources.json` carries two dates per source. `last_checked` is written by a weekly GitHub Action that re-fetches every page and re-hashes every statute section through `canada-law`; a change opens an issue. `last_human_verified` changes only when someone runs `npm run accept` after reading the changed source. The skill refuses to state rules when the second date is more than 180 days old or a statute source has changed and not been re-read.
+**Not tested**: real DeepSeek, Doubao or ChatGPT web apps; any real worker or real complaint. The grader was the same assistant that wrote the skill.
 
 ## Cost
 
-An answer with the skill takes 7 to 11 tool calls (status script, reference files, statute sections), about three times the tokens of the same model answering from memory. On Codex that was 120,000 to 270,000 tokens per answer in our runs, most of it cached context re-sent each turn. On a subscription plan this matters more than the dollar cost.
+- Skill: 4 to 5 tool calls per answer (was 7 to 11), about US$0.15 with Claude.
+- Chat pack: the first reply reads the whole pack (quick version about 8,400 tokens), and every later reply in the same chat carries it.
+- GPT model via Codex with the quick pack: about 33,000 tokens per answer, against 150,000–240,000 with the skill.
+
+## How an answer is built
+
+1. **One start command.** `scripts/start.mjs` prints the status (latest automated check) and the two reference files the first reply needs.
+2. **Statute text only when needed**, through `canada-law`, when the person asks about a rule or for the wording. If it cannot be fetched, the answer says so and does not fill in from elsewhere.
+3. **Reference files** (Chinese): routing and deadlines, first step, intake questions, facts package, the form, what employers say, common traps. Every statement is tagged with its source.
+4. **Sixteen rules** in `SKILL.md`, each added after a test failed without it: deadline stated conditionally, no invented prerequisites, no conclusions, short by default, only what was checked, and so on.
 
 ## Reporting a mistake
 
@@ -96,13 +87,13 @@ Open a [GitHub issue](https://github.com/bellaaaaxu/bc-rights-skill/issues). Quo
 ## Development
 
 ```bash
-npm test          # unit and structure tests (55)
-npm run validate  # skills-ref validate
-npm run check     # re-check all 22 official sources (needs canada-law for the statute hashes)
-npm run accept    # after reading a changed source: record the new baseline and today's human-verified date
+npm test                         # unit and structure tests
+npm run validate                 # skills-ref validate
+npm run check                    # re-check the 22 official sources (statute part needs canada-law)
+node scripts/build-chat-pack.mjs # rebuild the two chat packs in chat/
 ```
 
-The evaluation runners are in `evals/run/`. Test sets were frozen before the runs (commit hashes in `docs/acceptance/`). Graded answers and transcripts stay in `.local/`, outside the repository.
+`npm run accept` is optional: after someone has read a changed source and updated the reference files, it records the new baseline. Without it nothing unsafe happens; the changed part simply stays held back. The evaluation runners are in `evals/run/`; graded answers stay in `.local/`, outside the repository.
 
 ## Licence
 

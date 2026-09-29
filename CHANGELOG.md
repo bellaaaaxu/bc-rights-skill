@@ -1,5 +1,45 @@
 # Changelog
 
+## v0.2.0 (2026-09-29)
+
+Short replies, a chat pack for any AI app, and maintenance that needs nobody.
+
+### Design decisions
+
+- **Short by default**: the first reply gives one answer sentence, the deadline (conditional), one next step, what is not needed first, at most three questions, and a closing line offering more ("reply 'more' / 1 / 2 / 3"). Detail when asked. (SKILL.md rule 15)
+- **Say what was not checked**: no date, figure, link, section number or source status unless it came from the skill's files or a tool in this conversation. (Rule 16, rubric code B9)
+- **No human review**: the 180-day human-verification clock is gone. The weekly check records what changed; the skill holds back only the facts that rest on a changed source (statutes section by section) and points to the official page or 1-833-236-3700. Fail closed only if the automated check itself is more than 180 days old. Installed copies read the latest check results from GitHub when online. The weekly job no longer opens issues.
+
+### Changed
+
+- `scripts/start.mjs`: one command prints the status and the two reference files the first reply needs; the first reply fetches no statute text unless asked. 4 to 5 tool calls per answer instead of 7 to 11.
+- `scripts/status.mjs`: `degraded`, `changed_sections`, `last_checked`, `status_source`; finds canada-law installed next to the skill (claude.ai mounts uploaded skills side by side); a canada-law script that fails (no network) now means fallback mode.
+- Chat pack: `chat/bc-unpaid-wages-chat.txt` (quick, default) and `chat/bc-unpaid-wages-chat-full.txt`, rebuilt weekly with the check date and any held-back facts; answers in the person's language; no drafting notes.
+- canada-law 0.2.3 in the install command and the weekly check.
+- Rubric v0.2 addendum: B9 (unchecked date or figure stated as checked), L1 (first reply too long), L2 (no closing offer).
+
+### Evidence
+
+| Test | Result |
+|---|---|
+| 5 new questions × skill, skill without canada-law, quick chat pack | 0 of 15 blocking |
+| Regression: procedure 22 + journey 10 × skill and quick chat pack | 0 of 64 blocking; median first-reply length 278 (skill) and 209 (chat pack), against 504–773 before |
+| Full chat pack, Claude with no tools, 40 questions | 0 of 40 blocking with the pack, 23 of 40 without |
+| Chat pack, GPT via Codex (gpt-5.6-sol), 10 + 2 questions | 0 of 12 blocking; one English question answered in Chinese before the language rule was added |
+| Simulated change (complaint-process page and ESA s.74 marked changed) | chat pack held back the deadline and sent the person to the official page or phone; skill fetched the current s.74 before stating it |
+| claude.ai upload (2026-09-29) | skill triggered, status script ran, 0 blocking |
+
+Details: `evals/results/2026-09-29-chat-pack.md`. Graded by the assistant that wrote the skill; small samples.
+
+### Known limitations
+
+- About half of English first replies are longer than the 150-word target.
+- The first numbered question often asks two things ("Are you still working there? If not, what was your last day?").
+- In the no-thinking test setup, a few chat-pack replies began with the model's own drafting notes: 3 of about 42 before the fix, 1 of 8 after.
+- When canada-law answers a question on its own (a pure statute question), it uses its own longer format.
+- Still no real-user or clinic review.
+
+
 ## v0.1.0 (2026-09-28)
 
 First release. One skill, `bc-unpaid-wages`: unpaid wages, overtime, statutory holiday pay and vacation pay complaint to the BC Employment Standards Branch, in Chinese or English.

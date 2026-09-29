@@ -1,6 +1,7 @@
 {
-  "note": "Official sources the bc-unpaid-wages skill relies on. Two dates per source: last_checked moves on every automated run; last_human_verified moves only when a person has read the source again and run `npm run accept`. fail_closed_after_days (180) is a safety threshold this project chose; it is not a rule of the Employment Standards Branch or of any statute. Types: phrases (these key phrases must still be on the page), hash (file unchanged), reachable (page opens), law (statute text of the listed [act_id, section] pairs unchanged, fetched through canada-law).",
+  "note": "Official sources behind the reference files. A weekly GitHub Action re-checks every source and writes status, last_checked, last_ok and (for statutes) changed_sections; nobody has to review anything. status.mjs turns a changed source, or one not checked for more than unchecked_grace_days, into facts the skill must hold back (SKILL.md Step 0), and fails closed when the newest automated check is more than fail_closed_after_days old. last_human_verified records the last time a person reviewed the source (optional, by npm run accept). fail_closed_after_days (180) and unchecked_grace_days (30) are safety thresholds this project chose; they are not rules of the Employment Standards Branch or of any statute. Types: phrases (these key phrases must still be on the page), hash (file unchanged), reachable (page opens), law (statute text of the listed [act_id, section] pairs unchanged, fetched through canada-law).",
   "fail_closed_after_days": 180,
+  "unchecked_grace_days": 30,
   "sources": [
     {
       "id": "esb-form-pdf",
@@ -15,7 +16,8 @@
       "baseline": "ee72b17651486b3f4bfd3502a8683a567d41b02033a769dd15e22a56f140be98",
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "esb-submit",
@@ -36,7 +38,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "esb-process",
@@ -56,7 +59,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "esb-contact",
@@ -76,7 +80,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "esb-screen-1",
@@ -93,7 +98,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "esb-online-form",
@@ -107,7 +113,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "min-wage",
@@ -124,7 +131,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "overtime-page",
@@ -140,7 +148,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "worksafebc-bullying",
@@ -157,7 +166,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "worksafebc-injury",
@@ -170,7 +180,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "service-canada-ei",
@@ -184,7 +195,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "cra-taxes",
@@ -197,7 +209,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "bchrt",
@@ -210,7 +223,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "labour-program",
@@ -223,7 +237,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "self-help-kit-news",
@@ -239,7 +254,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "ei-apply",
@@ -256,7 +272,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "orgbook",
@@ -270,7 +287,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "esb-igm-updates",
@@ -283,7 +301,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "esb-igm-sick-leave",
@@ -300,7 +319,8 @@
       "baseline": null,
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29"
     },
     {
       "id": "laws-esa",
@@ -485,7 +505,9 @@
       },
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29",
+      "changed_sections": []
     },
     {
       "id": "laws-esr",
@@ -532,7 +554,9 @@
       },
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29",
+      "changed_sections": []
     },
     {
       "id": "laws-other",
@@ -568,7 +592,9 @@
       },
       "last_checked": "2026-09-29",
       "last_human_verified": "2026-09-28",
-      "status": "ok"
+      "status": "ok",
+      "last_ok": "2026-09-29",
+      "changed_sections": []
     }
   ]
 }

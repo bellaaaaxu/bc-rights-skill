@@ -58,6 +58,8 @@ export async function evaluate(sources, io) {
           status,
           detail: changed.length ? `text changed: ${changed.join(', ')}` : fresh.length ? `no baseline yet: ${fresh.join(', ')}` : `${s.sections.length} sections same as baseline`,
           baseline,
+          // Which sections changed, so the skill stops only the rules that rest on them (status.mjs, SKILL.md Step 0).
+          changed_sections: changed.map((c) => c.replace(/ \(current to .*\)$/, '')),
         });
       } else {
         out.push({ id: s.id, status: 'error', detail: `unknown type ${s.type}`, baseline: null });
@@ -69,7 +71,12 @@ export async function evaluate(sources, io) {
   return out;
 }
 
-/** Write the results back: last_checked always; on accept, baseline + last_human_verified for every source that was checked. */
+/**
+ * Write the results back. Every run: last_checked, status, last_ok (the last day the source was confirmed unchanged or
+ * reachable) and, for statute sources, changed_sections. No person has to act on a change: status.mjs turns a changed
+ * source into "do not state these facts; say it may have changed; give the official link" (SKILL.md Step 0).
+ * On accept (optional, when a maintainer has reviewed a change): new baseline, status ok, last_human_verified.
+ */
 export function applyResults(sources, results, today, accept) {
   const byId = Object.fromEntries(results.map((r) => [r.id, r]));
   return {
@@ -78,9 +85,13 @@ export function applyResults(sources, results, today, accept) {
       const r = byId[s.id];
       if (!r) return s;
       const next = { ...s, last_checked: today, status: r.status };
+      if (r.status === 'ok' || r.status === 'new') next.last_ok = today;
+      if (s.type === 'law') next.changed_sections = r.changed_sections ?? [];
       if (accept && r.status !== 'error') {
         next.status = 'ok';
+        next.last_ok = today;
         next.last_human_verified = today;
+        if (s.type === 'law') next.changed_sections = [];
         if (r.baseline !== null) next.baseline = r.baseline;
       }
       return next;

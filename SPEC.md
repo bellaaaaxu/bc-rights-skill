@@ -239,3 +239,11 @@ bc-rights-skill/
 5. README、NOTICE、CHANGELOG、隐私扫描、发布（推送前问她）。
 
 每一步先实测第一项 → 汇报 → 她说「开始」。
+
+## 15. v0.2 变更（2026-09-29）
+
+1. **默认短答。** SKILL.md 规则 15：第一轮只给一句回答、条件式期限、一个下一步、不用先做的事、最多 3 个问题、结尾「回复『详细』/1/2/3」；要详细再给。`scripts/start.mjs` 一条命令读完第一轮要的东西，第一轮不取法条。
+2. **不确定就直说。** 规则 16：日期、数字、网址、条文号、来源状态只说查到的；rubric 加 B9。
+3. **不需要人工审核。** 取代 §8 的双日期设计：`last_human_verified` 不再决定能不能说；每周自动检查写 `status / last_checked / last_ok / changed_sections`；`status.mjs` 把变了的来源列进 `degraded`（法条按条列进 `changed_sections`），SKILL.md 第 0 步规定这些内容不说、改指向官方页面和 ESB 电话；一个月以上检查不到的来源同样停；自动检查本身超过 180 天才整体 fail closed。装在本机的副本联网时读 GitHub 上最新的检查结果（`mergeRemote`）。每周任务不再开 issue，改为重建 `chat/` 里的两个贴文包并提交。`npm run accept` 保留为可选。
+
+实测见 `evals/results/2026-09-29-chat-pack.md` 与 CHANGELOG v0.2.0。

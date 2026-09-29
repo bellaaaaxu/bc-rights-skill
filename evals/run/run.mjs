@@ -4,9 +4,9 @@
 //   bare      empty project, web tools on: an ordinary AI that can browse
 //   skill     project holds bc-unpaid-wages + canada-employment-law (script tier), web tools on
 //   fallback  project holds bc-unpaid-wages only, and ~/.claude/skills/canada-employment-law is moved away during the run
-//   chat      no tools at all; the prompt is the quick chat pack (dist/bc-unpaid-wages-chat.md) followed by the question,
+//   chat      no tools at all; the prompt is the quick chat pack (chat/bc-unpaid-wages-chat.txt) followed by the question,
 //             as a person would paste it into a chat app. Build the packs first: node scripts/build-chat-pack.mjs
-//   chatfull  the same with the full chat pack (dist/bc-unpaid-wages-chat-full.md)
+//   chatfull  the same with the full chat pack (chat/bc-unpaid-wages-chat-full.txt)
 //   plain     no tools, no pack: an ordinary chat app answering from memory (the comparison for "chat")
 // Output: .local/eval-runs/<time>/runs/<case>-<arm>.jsonl, blind/<random>.md (answer only), mapping.json
 // Spends the tester's own Claude usage; one process at a time (parallel `claude` processes collided on ~/.claude.json).
@@ -74,12 +74,12 @@ const chatArgv = () => [
   ...(model ? ['--model', model] : []),
 ];
 // chat = the quick pack (default download), chatfull = the full pack. Build both: node scripts/build-chat-pack.mjs
-const PACKS = { chat: 'bc-unpaid-wages-chat.md', chatfull: 'bc-unpaid-wages-chat-full.md' };
+const PACKS = { chat: 'bc-unpaid-wages-chat.txt', chatfull: 'bc-unpaid-wages-chat-full.txt' };
 const packs = {};
 for (const [arm, file] of Object.entries(PACKS)) {
   if (!arms.includes(arm)) continue;
-  const p = join(root, 'dist', file);
-  if (!existsSync(p)) { console.error(`${arm} arm needs dist/${file}: run node scripts/build-chat-pack.mjs`); process.exit(2); }
+  const p = join(root, 'chat', file);
+  if (!existsSync(p)) { console.error(`${arm} arm needs chat/${file}: run node scripts/build-chat-pack.mjs`); process.exit(2); }
   packs[arm] = readFileSync(p, 'utf8');
 }
 const chatInput = (arm, q) => (packs[arm] ? `${packs[arm]}\n\n---\n\n我的情况 / My situation:\n\n${q}` : q);

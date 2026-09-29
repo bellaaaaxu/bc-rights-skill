@@ -54,3 +54,29 @@ test('an error is never accepted as verified', async () => {
   assert.equal(accepted.sources[0].status, 'error');
   assert.equal(accepted.sources[0].last_human_verified, '2026-09-27');
 });
+
+test('automatic maintenance: a run records last_ok, keeps the old last_ok on a failed check, and lists changed sections', async () => {
+  const src = sources();
+  src.sources[0].last_ok = '2026-09-01';
+  const results = await evaluate(src, io({
+    get: async (url) => ({ u1: 'Complaints must be filed within 6 months. There is no fee.', u2: 'FILE' }[url] ?? (() => { throw new Error('HTTP 500'); })()),
+    law: async () => ({ text: 'new text', current_to: '2026-10-01' }),
+  }));
+  const next = applyResults(src, results, today, false);
+  const byId = Object.fromEntries(next.sources.map((s) => [s.id, s]));
+  assert.equal(byId.p.last_ok, today);
+  assert.equal(byId.r.status, 'error');
+  assert.equal(byId.r.last_ok, undefined); // never ok before, so nothing to keep
+  assert.equal(byId.laws.status, 'changed');
+  assert.deepEqual(byId.laws.changed_sections, ['96113_01 s.74']);
+});
+
+test('accept (optional maintainer review) clears changed sections and sets a new baseline', async () => {
+  const src = sources();
+  const results = await evaluate(src, io({ law: async () => ({ text: 'new text', current_to: '2026-10-01' }) }));
+  const next = applyResults(src, results, today, true);
+  const laws = next.sources.find((s) => s.id === 'laws');
+  assert.equal(laws.status, 'ok');
+  assert.deepEqual(laws.changed_sections, []);
+  assert.equal(laws.last_human_verified, today);
+});

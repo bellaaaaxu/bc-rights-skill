@@ -48,9 +48,9 @@ const hideFor = { bare: [join(agentsSkills, 'bc-unpaid-wages'), join(agentsSkill
 // chat: the chat pack pasted before the question, as in a chat app; no skills, no memories, web search disabled.
 // Codex still has a shell and its own plugins (computer use); the pack tells it that it cannot run anything.
 hideFor.chat = hideFor.bare;
-const packPath = join(root, 'dist', 'bc-unpaid-wages-chat.md');
+const packPath = join(root, 'chat', 'bc-unpaid-wages-chat.txt');
 const pack = existsSync(packPath) ? readFileSync(packPath, 'utf8') : null;
-if (arms.includes('chat') && !pack) { console.error('chat arm needs dist/bc-unpaid-wages-chat.md: run node scripts/build-chat-pack.mjs'); process.exit(2); }
+if (arms.includes('chat') && !pack) { console.error('chat arm needs chat/bc-unpaid-wages-chat.txt: run node scripts/build-chat-pack.mjs'); process.exit(2); }
 const promptFor = (arm, q) => (arm === 'chat' ? `${pack}\n\n---\n\n我的情况 / My situation:\n\n${q}` : q);
 // Codex discovers a skill by scanning every subfolder of the skills root for a SKILL.md, whatever the folder is
 // called, so renaming in place does not hide it. Move the folder out of the root (to <root>/../.hidden-by-eval/).
