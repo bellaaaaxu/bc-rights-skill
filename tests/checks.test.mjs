@@ -60,3 +60,7 @@ test('chat pack: a legal rule without the not-fetched tag is flagged F2; with it
   assert.deepEqual(autoChecks('The deadline is 6 months after your last day.', { chat: true }), ['F2']);
   assert.deepEqual(autoChecks('期限是最后工作日起 6 个月（条文未现取；参考资料核对于 2026-09-28）。', { chat: true }), []);
 });
+
+test('quick chat pack: the one-line footer tag counts as the not-fetched tag', () => {
+  assert.deepEqual(autoChecks('规则来自 2026-09-28 核对的参考资料，未取现行法条原文。', { chat: true }), []);
+});

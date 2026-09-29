@@ -27,7 +27,7 @@ const model = opt('--model');
 const dry = args.includes('--dry-run');
 const outOpt = opt('--out'); // append into an existing run folder (chunked runs share one mapping.json)
 if (!set) { console.error('--set procedure|journey|journey-holdout'); process.exit(2); }
-for (const a of arms) if (!['bare', 'skill', 'fallback', 'chat', 'plain'].includes(a)) { console.error(`unknown arm ${a}`); process.exit(2); }
+for (const a of arms) if (!['bare', 'skill', 'fallback', 'chat', 'chatshort', 'plain'].includes(a)) { console.error(`unknown arm ${a}`); process.exit(2); }
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const cases = readFileSync(join(root, 'evals', set, 'cases.jsonl'), 'utf8').trim().split('\n').map(JSON.parse).filter((c) => !only || only.includes(c.id));
@@ -75,7 +75,10 @@ const chatArgv = () => [
 const packPath = join(root, 'dist', 'bc-unpaid-wages-chat.md');
 const pack = existsSync(packPath) ? readFileSync(packPath, 'utf8') : null;
 if (arms.includes('chat') && !pack) { console.error('chat arm needs dist/bc-unpaid-wages-chat.md: run node scripts/build-chat-pack.mjs'); process.exit(2); }
-const chatInput = (arm, q) => (arm === 'chat' ? `${pack}\n\n---\n\n我的情况 / My situation:\n\n${q}` : q);
+const shortPath = join(root, 'dist', 'bc-unpaid-wages-chat-short.md');
+const shortPack = existsSync(shortPath) ? readFileSync(shortPath, 'utf8') : null;
+if (arms.includes('chatshort') && !shortPack) { console.error('chatshort arm needs dist/bc-unpaid-wages-chat-short.md: run node scripts/build-chat-pack.mjs --short'); process.exit(2); }
+const chatInput = (arm, q) => (arm === 'chat' ? `${pack}\n\n---\n\n我的情况 / My situation:\n\n${q}` : arm === 'chatshort' ? `${shortPack}\n\n---\n\n我的情况 / My situation:\n\n${q}` : q);
 
 function summarise(jsonl) {
   const ev = jsonl.split('\n').flatMap((l) => { try { return [JSON.parse(l)]; } catch { return []; } });
@@ -107,7 +110,7 @@ for (const arm of arms) {
       if (dry) { console.log(`${c.id} ${arm}: claude ${argv(c.q).map((a) => JSON.stringify(a)).join(' ')}`); continue; }
       mkdirSync(join(out, 'runs'), { recursive: true });
       mkdirSync(join(out, 'blind'), { recursive: true });
-      const noTools = arm === 'chat' || arm === 'plain';
+      const noTools = arm === 'chat' || arm === 'chatshort' || arm === 'plain';
       const r = noTools
         ? spawnSync(claude, chatArgv(), { cwd, input: chatInput(arm, c.q), encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 10 * 60 * 1000 })
         : spawnSync(claude, argv(c.q), { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 10 * 60 * 1000, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -116,7 +119,7 @@ for (const arm of arms) {
       const s = summarise(jsonl);
       const key = randomBytes(4).toString('hex');
       writeFileSync(join(out, 'blind', `${key}.md`), `# ${key}\n\n**Question:** ${c.q}\n\n---\n\n${s.answer}\n`);
-      const auto = autoChecks(s.answer, { allowedUrlPrefixes, fallback: arm === 'fallback', chat: arm === 'chat' });
+      const auto = autoChecks(s.answer, { allowedUrlPrefixes, fallback: arm === 'fallback', chat: arm === 'chat' || arm === 'chatshort' });
       mapping.push({ key, case: c.id, set, arm, ...s, answer: undefined, auto });
       writeFileSync(mappingPath, JSON.stringify(mapping, null, 2)); // after every answer, so a killed run loses nothing
       total += s.cost_usd ?? 0;

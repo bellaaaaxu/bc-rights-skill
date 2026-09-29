@@ -28,7 +28,12 @@ const flow = skill.indexOf('\n## The flow');
 if (step0 < 0 || flow < 0 || flow < step0) throw new Error('SKILL.md layout changed: expected "## Step 0" before "## The flow"');
 const skillBody = (skill.slice(0, step0) + skill.slice(flow)).trim().replace(/^# /m, '## ');
 
-const refs = ['01-routing-deadlines', '02-first-action', '03-intake', '04-package', '05-form', '06-employer-says', '07-traps'];
+// --short: the quick version. Short replies, one tag line instead of per-sentence tags, and only the reference files a
+// first contact needs (routing and deadlines, first action, traps). The full version stays the default.
+const SHORT = process.argv.includes('--short');
+const refs = SHORT
+  ? ['01-routing-deadlines', '02-first-action', '07-traps']
+  : ['01-routing-deadlines', '02-first-action', '03-intake', '04-package', '05-form', '06-employer-says', '07-traps'];
 const refText = refs
   .map((r) => {
     const t = readFileSync(join(skillDir, 'references', `${r}.md`), 'utf8').replace(/\r\n/g, '\n').trim();
@@ -61,7 +66,15 @@ This is the chat version of a skill written for assistants that can run scripts.
 4. **Skip the tool steps.** Wherever this guide says to run \`status.mjs\`, to use canada-law, to fetch or quote a current section, to read a reference file, or to look in \`sources.json\`: you cannot, and you do not need to. The reference files are included below, each under its file name. Every official URL you may use is written in this guide; \`sources.json\` is not included.
 
 If your app can search the web, you may open the official URLs written in this guide to check them. Do not cite any other page, and never compose or retype a URL: copy it character for character.
+${SHORT ? `
+**This is the quick version: keep every reply short.** The person may be on a free plan with little usage left, and a wall of text frightens people into doing nothing.
 
+- **First reply**: only these, in this order, in plain words: (1) one sentence that answers what they asked; (2) if they have left the job or may have, the deadline in one line, stated conditionally ("if your last day was X, file by Y"); (3) the one next step, with one official link or the ESB phone line 1-833-236-3700; (4) one line on what they do NOT need before filing (talking to the boss, all the evidence, an exact amount, a lawyer); (5) if part of it is not the ESB's (union, federally regulated industry, EI, injury, harassment), one line naming the right place; (6) at most 3 numbered questions, only the ones that change the deadline or where this goes; (7) one closing line offering more (the statute wording, the form part by part, organising the facts). Aim for under 250 Chinese characters or 150 English words, links not counted. No headings, no tables, no statute quotes in the first reply.
+- **Tags**: instead of point 1 and point 2 above, end every reply with one line: 「规则来自 ${verified} 核对的参考资料，未取现行法条原文。一般信息，不是法律意见，结果由 ESB 决定。」 or in English "Rules from reference material verified ${verified}; current statute text not fetched. General information, not legal advice; the ESB decides."
+- **Later replies**: stay short. Answer what they asked, then the next step of the flow. Go deeper only when they ask.
+- **Never shortened away**: the deadline, the right office, and the refusals (no predicting the outcome, no figure before an hours and payment table, no threats).
+- This quick version includes reference files 01, 02 and 07 only. For intake and the facts package (files 03 to 06), tell the person to use the full version at ${REPO}.
+` : ''}
 The guide follows.
 
 ---`;
@@ -69,7 +82,8 @@ The guide follows.
 const pack = `${header}\n\n${skillBody}\n\n---\n\n${refText}\n\n---\n\n（聊天版结束。bc-unpaid-wages chat pack v${version}，参考资料核对于 ${verified}。${REPO}）\n`;
 
 mkdirSync(join(root, 'dist'), { recursive: true });
-writeFileSync(join(root, 'dist', 'bc-unpaid-wages-chat.md'), pack, 'utf8');
-writeFileSync(join(root, 'dist', 'bc-unpaid-wages-chat.txt'), pack, 'utf8');
+const base = SHORT ? 'bc-unpaid-wages-chat-short' : 'bc-unpaid-wages-chat';
+writeFileSync(join(root, 'dist', `${base}.md`), pack, 'utf8');
+writeFileSync(join(root, 'dist', `${base}.txt`), pack, 'utf8');
 const cjk = (pack.match(/[㐀-鿿]/g) || []).length;
-console.log(`dist/bc-unpaid-wages-chat.md: ${pack.length} characters (${cjk} Chinese), about ${Math.round(cjk + (pack.length - cjk) / 4)} tokens; verified ${verified}, rules stop from ${closedFrom}`);
+console.log(`dist/${base}.md: ${pack.length} characters (${cjk} Chinese), about ${Math.round(cjk + (pack.length - cjk) / 4)} tokens; verified ${verified}, rules stop from ${closedFrom}`);
