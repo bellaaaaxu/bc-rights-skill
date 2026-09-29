@@ -3,10 +3,12 @@ name: Weekly check of official sources
 # Maintenance is automatic: nobody has to review anything. The check records what changed in sources.json; the skill
 # (status.mjs, SKILL.md Step 0) and the chat packs then hold back only the facts that rest on a changed source and point
 # the person to the official page or the ESB phone line. No issue is opened, so nobody is pinged.
+# The schedule fires daily; a scheduled run checks only when due (a week since the last check, or the day after a run
+# that could not reach a source). A manual run always checks.
 
 on:
   schedule:
-    - cron: '0 16 * * 1' # Mondays 16:00 UTC (08:00 or 09:00 Pacific)
+    - cron: '0 16 * * *' # daily 16:00 UTC (08:00 or 09:00 Pacific)
   workflow_dispatch:
 
 permissions:
@@ -29,7 +31,7 @@ jobs:
 
       # A changed source is recorded, not treated as a failure: the skill handles it on its own.
       - name: Check official sources
-        run: node scripts/check-sources.mjs || true
+        run: node scripts/check-sources.mjs ${{ github.event_name == 'schedule' && '--if-due' || '' }} || true
 
       - name: Rebuild the chat packs (check date and held-back facts)
         run: node scripts/build-chat-pack.mjs

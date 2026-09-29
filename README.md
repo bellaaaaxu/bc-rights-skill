@@ -44,7 +44,7 @@ Or copy `skills/bc-unpaid-wages` into your assistant's skills folder, for exampl
 
 ## Maintained automatically, no human review
 
-- **Every week** a GitHub Action re-checks all 22 official sources: key sentences still on the ESB pages, the complaint form PDF unchanged, the 41 statute sections the reference files rely on unchanged.
+- **Every week** a GitHub Action re-checks all 22 official sources: key sentences still on the ESB pages, the complaint form PDF unchanged, the 41 statute sections the reference files rely on unchanged. If a site cannot be reached, it tries again the next day.
 - **When a source changes, only what rests on it stops.** Every sentence in the reference files is tagged with its source; the changed part is no longer stated, and the answer says the official source may have just changed and gives the official link or 1-833-236-3700. Statutes are handled section by section, so one amended section does not silence the whole Act.
 - **Installed copies follow along**: when online, the skill reads the latest check results from GitHub before answering, so nobody has to reinstall. That is one request for a public file, with no personal information.
 - **Safety net**: if the automated check has not run for more than 180 days (the weekly job stopped, or an offline copy is old), the skill stops stating any legal rule and gives only official links and the phone line. 180 days is this project's own threshold, not a legal rule.

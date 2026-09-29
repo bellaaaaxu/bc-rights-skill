@@ -99,6 +99,32 @@ export function applyResults(sources, results, today, accept) {
   };
 }
 
+/**
+ * Try a fetch again after a pause. Government sites sometimes refuse one request from a cloud runner and answer the
+ * next; a missing page (404, 410) is not retried.
+ */
+export async function withRetry(fn, delays = [10000, 30000], sleep = (ms) => new Promise((r) => setTimeout(r, ms))) {
+  for (let i = 0; ; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (i >= delays.length || /^HTTP 4(04|10)\b/.test(e.message)) throw e;
+      await sleep(delays[i]);
+    }
+  }
+}
+
+/**
+ * The scheduled job runs every day but checks only when it is due: a week after the last check, or the next day when
+ * the last run could not reach a source. One refused run then costs a day, not a week of the 30-day grace.
+ */
+export function due(sources, today, everyDays = 7) {
+  const list = sources.sources;
+  if (list.some((s) => s.status === 'error' || !s.last_checked)) return true;
+  const oldest = list.map((s) => s.last_checked).sort()[0];
+  return (Date.parse(today) - Date.parse(oldest)) / 86400000 >= everyDays;
+}
+
 export function report(results, sources, today) {
   const count = (st) => results.filter((r) => r.status === st).length;
   const what = Object.fromEntries(sources.sources.map((s) => [s.id, s]));

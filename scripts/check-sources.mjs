@@ -1,6 +1,7 @@
 // scripts/check-sources.mjs
 // Weekly check of the official sources in skills/*/references/sources.json.
 //   node scripts/check-sources.mjs            check; write last_checked and status; report to .local/check-report.md
+//   node scripts/check-sources.mjs --if-due   the daily scheduled run: check only if due (see due() in lib/check.mjs)
 //   node scripts/check-sources.mjs --accept   after a person has re-read the changed sources: set baseline and last_human_verified
 // Exit code 1 when anything changed, is new, or could not be checked (unless --accept).
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
@@ -9,7 +10,7 @@ import { execFileSync } from 'node:child_process';
 import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { evaluate, applyResults, report } from './lib/check.mjs';
+import { evaluate, applyResults, report, withRetry, due } from './lib/check.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const sourcesPath = join(root, 'skills', 'bc-unpaid-wages', 'references', 'sources.json');
@@ -29,11 +30,11 @@ function findCanadaLaw() {
 const cli = findCanadaLaw();
 
 const io = {
-  get: async (url) => {
+  get: (url) => withRetry(async () => {
     const res = await fetch(url, { headers: { 'User-Agent': UA }, redirect: 'follow', signal: AbortSignal.timeout(30000) });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return Buffer.from(await res.arrayBuffer()).toString('utf8');
-  },
+  }),
   sha: (s) => createHash('sha256').update(s).digest('hex'),
   law: async (act, sec) => {
     if (!cli) throw new Error('canada-law script not found: set CANADA_LAW_CLI or install canada-law');
@@ -43,6 +44,10 @@ const io = {
 };
 
 const sources = JSON.parse(readFileSync(sourcesPath, 'utf8'));
+if (process.argv.includes('--if-due') && !due(sources, today)) {
+  console.log('Not due: checked within the last 7 days and every source was reached.');
+  process.exit(0);
+}
 const results = await evaluate(sources, io);
 const next = applyResults(sources, results, today, accept);
 writeFileSync(sourcesPath, JSON.stringify(next, null, 2) + '\n', 'utf8');

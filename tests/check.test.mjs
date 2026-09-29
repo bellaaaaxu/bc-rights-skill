@@ -1,7 +1,7 @@
 // tests/check.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { evaluate, applyResults } from '../scripts/lib/check.mjs';
+import { evaluate, applyResults, withRetry, due } from '../scripts/lib/check.mjs';
 
 const today = '2026-10-05';
 const sources = () => ({
@@ -79,4 +79,26 @@ test('accept (optional maintainer review) clears changed sections and sets a new
   assert.equal(laws.status, 'ok');
   assert.deepEqual(laws.changed_sections, []);
   assert.equal(laws.last_human_verified, today);
+});
+
+test('withRetry tries again after a refused request, but not after a missing page', async () => {
+  const waits = [];
+  const sleep = async (ms) => { waits.push(ms); };
+  let n = 0;
+  const flaky = async () => { n += 1; if (n < 3) throw new Error('fetch failed'); return 'page'; };
+  assert.equal(await withRetry(flaky, [10, 30], sleep), 'page');
+  assert.deepEqual(waits, [10, 30]);
+
+  await assert.rejects(withRetry(async () => { throw new Error('fetch failed'); }, [10, 30], sleep), /fetch failed/);
+  waits.length = 0;
+  await assert.rejects(withRetry(async () => { throw new Error('HTTP 404'); }, [10, 30], sleep), /HTTP 404/);
+  assert.deepEqual(waits, []);
+});
+
+test('due: the daily run checks a week after the last check, or the next day after a source could not be reached', () => {
+  const s = (over = {}) => ({ sources: [{ id: 'a', last_checked: '2026-10-01', status: 'ok' }, { id: 'b', last_checked: '2026-10-01', status: 'ok', ...over }] });
+  assert.equal(due(s(), '2026-10-07'), false);
+  assert.equal(due(s(), '2026-10-08'), true);
+  assert.equal(due(s({ status: 'error' }), '2026-10-02'), true);
+  assert.equal(due(s({ last_checked: null }), '2026-10-02'), true);
 });
