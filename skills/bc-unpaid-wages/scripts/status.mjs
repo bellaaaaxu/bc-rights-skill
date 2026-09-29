@@ -10,7 +10,11 @@ import { fileURLToPath } from 'node:url';
 
 const DAY = 86_400_000;
 
-export function status(sources, today = new Date(), home = homedir()) {
+const HERE = dirname(fileURLToPath(import.meta.url));
+
+// skillsRoot: the folder that holds this skill. Hosts that mount uploaded skills side by side (claude.ai, some
+// agents) put canada-employment-law next to bc-unpaid-wages rather than under the home directory.
+export function status(sources, today = new Date(), home = homedir(), skillsRoot = join(HERE, '..', '..')) {
   const dates = sources.sources.map((s) => s.last_human_verified).filter(Boolean).sort();
   const oldest = dates[0] ?? null;
   const days = oldest === null ? null : Math.floor((today.getTime() - new Date(oldest).getTime()) / DAY);
@@ -23,6 +27,7 @@ export function status(sources, today = new Date(), home = homedir()) {
   const candidates = [
     join(home, '.agents', 'skills', 'canada-employment-law', 'scripts', 'bclaw.mjs'),
     join(home, '.claude', 'skills', 'canada-employment-law', 'scripts', 'bclaw.mjs'),
+    join(skillsRoot, 'canada-employment-law', 'scripts', 'bclaw.mjs'),
   ];
   return {
     last_human_verified: oldest,
@@ -42,7 +47,6 @@ export function status(sources, today = new Date(), home = homedir()) {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  const here = dirname(fileURLToPath(import.meta.url));
-  const sources = JSON.parse(readFileSync(join(here, '..', 'references', 'sources.json'), 'utf8'));
+  const sources = JSON.parse(readFileSync(join(HERE, '..', 'references', 'sources.json'), 'utf8'));
   console.log(JSON.stringify(status(sources), null, 2));
 }

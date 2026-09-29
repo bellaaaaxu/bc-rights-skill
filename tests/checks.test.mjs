@@ -55,3 +55,8 @@ test('B3: negation wrapped in markdown emphasis is still a negation', () => {
   assert.deepEqual(autoChecks('She does **not** have to contact the employer before filing.'), []);
   assert.deepEqual(autoChecks('You do _not_ need to contact your boss first.'), []);
 });
+
+test('chat pack: a legal rule without the not-fetched tag is flagged F2; with it, not', () => {
+  assert.deepEqual(autoChecks('The deadline is 6 months after your last day.', { chat: true }), ['F2']);
+  assert.deepEqual(autoChecks('期限是最后工作日起 6 个月（条文未现取；参考资料核对于 2026-09-28）。', { chat: true }), []);
+});

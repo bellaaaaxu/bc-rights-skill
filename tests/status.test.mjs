@@ -1,6 +1,9 @@
 // tests/status.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import { status } from '../skills/bc-unpaid-wages/scripts/status.mjs';
 
 const src = (over = {}) => ({
@@ -45,5 +48,17 @@ test('the oldest human verification date counts', () => {
 });
 
 test('reports whether the canada-law script exists under the given home', () => {
-  assert.equal(status(src(), new Date('2026-02-01'), home).canada_law_script, null);
+  assert.equal(status(src(), new Date('2026-02-01'), home, 'C:/nonexistent-skills-root').canada_law_script, null);
+});
+
+test('finds canada-law installed next to this skill (hosts that mount uploaded skills side by side)', () => {
+  const root = mkdtempSync(join(tmpdir(), 'skills-root-'));
+  try {
+    const script = join(root, 'canada-employment-law', 'scripts', 'bclaw.mjs');
+    mkdirSync(dirname(script), { recursive: true });
+    writeFileSync(script, '// stub');
+    assert.equal(status(src(), new Date('2026-02-01'), home, root).canada_law_script, script);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });

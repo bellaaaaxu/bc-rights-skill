@@ -24,7 +24,7 @@ const model = opt('--model');
 const effort = opt('--effort');
 const dry = args.includes('--dry-run');
 if (!set) { console.error('--set procedure|journey|journey-holdout'); process.exit(2); }
-for (const a of arms) if (!['bare', 'skill', 'fallback'].includes(a)) { console.error(`unknown arm ${a}`); process.exit(2); }
+for (const a of arms) if (!['bare', 'skill', 'fallback', 'chat'].includes(a)) { console.error(`unknown arm ${a}`); process.exit(2); }
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const cases = readFileSync(join(root, 'evals', set, 'cases.jsonl'), 'utf8').trim().split('\n').map(JSON.parse).filter((c) => !only || only.includes(c.id));
@@ -45,6 +45,13 @@ const allowedUrlPrefixes = sources.sources.filter((s) => s.url).map((s) => s.url
 // (~/.codex/memories, written by the desktop app from imported sessions): in the M4 sample 10 of 20 runs searched it.
 const codexMemories = join(homedir(), '.codex', 'memories');
 const hideFor = { bare: [join(agentsSkills, 'bc-unpaid-wages'), join(agentsSkills, 'canada-employment-law'), join(claudeSkills, 'canada-employment-law'), codexMemories], skill: [codexMemories], fallback: [join(agentsSkills, 'canada-employment-law'), join(claudeSkills, 'canada-employment-law'), codexMemories] };
+// chat: the chat pack pasted before the question, as in a chat app; no skills, no memories, web search disabled.
+// Codex still has a shell and its own plugins (computer use); the pack tells it that it cannot run anything.
+hideFor.chat = hideFor.bare;
+const packPath = join(root, 'dist', 'bc-unpaid-wages-chat.md');
+const pack = existsSync(packPath) ? readFileSync(packPath, 'utf8') : null;
+if (arms.includes('chat') && !pack) { console.error('chat arm needs dist/bc-unpaid-wages-chat.md: run node scripts/build-chat-pack.mjs'); process.exit(2); }
+const promptFor = (arm, q) => (arm === 'chat' ? `${pack}\n\n---\n\n我的情况 / My situation:\n\n${q}` : q);
 // Codex discovers a skill by scanning every subfolder of the skills root for a SKILL.md, whatever the folder is
 // called, so renaming in place does not hide it. Move the folder out of the root (to <root>/../.hidden-by-eval/).
 const parking = (p) => join(p, '..', '..', '.hidden-by-eval', p.split(/[\\/]/).pop());
@@ -56,7 +63,7 @@ function hide(paths) {
 function restore(moved) { for (const p of moved) if (existsSync(parking(p))) renameSync(parking(p), p); }
 
 // The prompt goes in on stdin ("-"), so no user text has to survive cmd.exe quoting.
-const argv = (lastFile, cwd) => ['exec', '--skip-git-repo-check', '--ephemeral', '-s', 'read-only', '--json', '-o', lastFile, '-C', cwd, ...(model ? ['-m', model] : []), ...(effort ? ['-c', `model_reasoning_effort=${effort}`] : []), '-'];
+const argv = (lastFile, cwd, arm) => ['exec', '--skip-git-repo-check', '--ephemeral', '-s', 'read-only', '--json', '-o', lastFile, '-C', cwd, ...(model ? ['-m', model] : []), ...(effort ? ['-c', `model_reasoning_effort=${effort}`] : []), ...(arm === 'chat' ? ['-c', 'web_search=disabled'] : []), '-'];
 const quote = (s) => `"${String(s).replace(/"/g, '\\"')}"`;
 
 function summarise(jsonl, last) {
@@ -79,6 +86,7 @@ function summarise(jsonl, last) {
     web_used: items.some((i) => /web_search/i.test(i.type || '')),
     memory_read: cmds.some(mem),
     commands: cmds.length,
+    mcp_calls: items.filter((i) => i.type === 'mcp_tool_call').length,
     tokens,
     answer: last,
   };
@@ -94,18 +102,18 @@ for (const arm of arms) {
   try {
     for (const c of cases) {
       const lastFile = join(out, 'runs', `${c.id}-${arm}.last.md`);
-      if (dry) { console.log(`${c.id} ${arm}: codex ${argv(lastFile, cwd).map((a) => JSON.stringify(a)).join(' ')}  <<< prompt on stdin`); continue; }
+      if (dry) { console.log(`${c.id} ${arm}: codex ${argv(lastFile, cwd, arm).map((a) => JSON.stringify(a)).join(' ')}  <<< prompt on stdin`); continue; }
       mkdirSync(join(out, 'runs'), { recursive: true });
       mkdirSync(join(out, 'blind'), { recursive: true });
-      const cmd = [quote(codex), ...argv(lastFile, cwd).map(quote)].join(' ');
-      const r = spawnSync(cmd, { shell: true, input: c.q, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 15 * 60 * 1000 });
+      const cmd = [quote(codex), ...argv(lastFile, cwd, arm).map(quote)].join(' ');
+      const r = spawnSync(cmd, { shell: true, input: promptFor(arm, c.q), encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 15 * 60 * 1000 });
       const jsonl = r.stdout ?? '';
       writeFileSync(join(out, 'runs', `${c.id}-${arm}.jsonl`), jsonl + (r.stderr ? `\n#stderr\n${r.stderr}` : ''));
       const last = existsSync(lastFile) ? readFileSync(lastFile, 'utf8') : '(no last message)';
       const s = summarise(jsonl, last);
       const key = randomBytes(4).toString('hex');
       writeFileSync(join(out, 'blind', `${key}.md`), `# ${key}\n\n**Question:** ${c.q}\n\n---\n\n${s.answer}\n`);
-      const auto = autoChecks(s.answer, { allowedUrlPrefixes, fallback: arm === 'fallback' });
+      const auto = autoChecks(s.answer, { allowedUrlPrefixes, fallback: arm === 'fallback', chat: arm === 'chat' });
       mapping.push({ key, case: c.id, set, arm, engine: 'codex', ...s, model: modelUsed, effort: effortUsed, memories_hidden: moved.includes(codexMemories), answer: undefined, auto });
       writeFileSync(join(out, 'mapping.json'), JSON.stringify(mapping, null, 2)); // after every answer
       // The blind key is deliberately not printed: the grader must not see which key belongs to which arm.
