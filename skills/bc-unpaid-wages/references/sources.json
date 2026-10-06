@@ -14,10 +14,10 @@
         "05-form"
       ],
       "baseline": "ee72b17651486b3f4bfd3502a8683a567d41b02033a769dd15e22a56f140be98",
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "esb-submit",
@@ -36,10 +36,10 @@
         "05-form"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "esb-process",
@@ -57,10 +57,10 @@
         "07-traps"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "esb-contact",
@@ -78,10 +78,10 @@
         "07-traps"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "esb-screen-1",
@@ -96,10 +96,10 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "esb-online-form",
@@ -111,10 +111,10 @@
         "05-form"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "min-wage",
@@ -129,10 +129,10 @@
         "05-form"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "overtime-page",
@@ -146,10 +146,10 @@
         "05-form"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "worksafebc-bullying",
@@ -164,10 +164,10 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "worksafebc-injury",
@@ -178,10 +178,10 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "service-canada-ei",
@@ -193,10 +193,10 @@
         "02-first-action"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "cra-taxes",
@@ -207,10 +207,10 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "bchrt",
@@ -221,10 +221,10 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "labour-program",
@@ -235,10 +235,10 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "self-help-kit-news",
@@ -252,10 +252,10 @@
         "02-first-action"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "ei-apply",
@@ -270,10 +270,10 @@
         "02-first-action"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "orgbook",
@@ -285,10 +285,10 @@
         "07-traps"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "esb-igm-updates",
@@ -299,10 +299,10 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "esb-igm-sick-leave",
@@ -317,10 +317,10 @@
         "01-routing-deadlines"
       ],
       "baseline": null,
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29"
+      "last_ok": "2026-10-06"
     },
     {
       "id": "laws-esa",
@@ -503,10 +503,10 @@
         "96113_01:96": "32ce523a3c471ef0dd82ed9a1ec14b81b6d1edf337c69e24dc22254c33298c84",
         "96113_01:97": "82e14e3f09fa8807c3e8850aeab538c4502737329b3732472a95ecdd693f0b92"
       },
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29",
+      "last_ok": "2026-10-06",
       "changed_sections": []
     },
     {
@@ -552,10 +552,10 @@
         "396_95:36": "7eda8649769de52651de4a481854f0055e8f11261b5928a066e4710d4f5cb44e",
         "396_95:45.031": "471eb6a428ac4dd95ebb5ec74003592bda2dc54fcc3ffad971b35b0f93be7c0f"
       },
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29",
+      "last_ok": "2026-10-06",
       "changed_sections": []
     },
     {
@@ -590,10 +590,10 @@
         "18045:33": "cbee074ff2f0a77bb9ddf7ee1325b285047a7a9208a7db3ed866f2ce26b693d4",
         "E-5.6:29": "67ba04209a556cb9122a33c6e90ce764df43d9a54983251dcede6ba517933a3e"
       },
-      "last_checked": "2026-09-29",
+      "last_checked": "2026-10-06",
       "last_human_verified": "2026-09-28",
       "status": "ok",
-      "last_ok": "2026-09-29",
+      "last_ok": "2026-10-06",
       "changed_sections": []
     }
   ]
